@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: 2023 Kai Uwe Broulik <ghqalpha@broulik.de>
+# SPDX-License-Identifier: CC0-1.0
+
+.directory
+CMakeLists.txt.user*
+build/*
+docs/*
+coverage/*
+coverage.info
+*.kate-swp

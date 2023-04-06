@@ -1,0 +1,31 @@
+---
+# SPDX-License-Identifier: BSD-2-Clause
+# SPDX-FileCopyrightText: 2023 Kai Uwe Broulik <ghqalpha@broulik.de>
+
+# This file is adapted from the KDE Frameworks coding style.
+---
+
+Language: Cpp
+
+BasedOnStyle: WebKit
+Standard: Cpp11
+TabWidth: 4
+ColumnLimit: 160
+SortIncludes: true
+BreakBeforeBraces: Linux
+PointerAlignment: Right
+AlignAfterOpenBracket: Align
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortFunctionsOnASingleLine: None
+AlwaysBreakBeforeMultilineStrings: true
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeBinaryOperators: NonAssignment
+Cpp11BracedListStyle: true
+SpaceBeforeCpp11BracedList: false
+KeepEmptyLinesAtTheStartOfBlocks: false
+NamespaceIndentation: None
+SpaceAfterTemplateKeyword: false
+AlwaysBreakTemplateDeclarations: true
+AllowShortLambdasOnASingleLine: Empty
+AllowAllArgumentsOnNextLine: false

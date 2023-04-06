@@ -1,0 +1,36 @@
+{
+    "code": 200,
+    "msg": "",
+    "data": [
+        {
+            "cbat": 91,
+            "feedIn": 3372,
+            "gridCharge": 101,
+            "load": 1000,
+            "pchargingPile": 0,
+            "ppv": 3000,
+            "sysSn": "SERIAL",
+            "uploadTime": "2023-01-01 14:59:32"
+        },
+        {
+            "cbat": 92,
+            "feedIn": 3373,
+            "gridCharge": 102,
+            "load": 1100,
+            "pchargingPile": 0,
+            "ppv": 4000,
+            "sysSn": "SERIAL",
+            "uploadTime": "2023-01-01 15:04:32"
+        },
+        {
+            "cbat": 93,
+            "feedIn": 3374,
+            "gridCharge": 103,
+            "load": 1200,
+            "pchargingPile": 0,
+            "ppv": 5000,
+            "sysSn": "SERIAL",
+            "uploadTime": "2023-01-01 15:09:32"
+        }
+    ]
+}

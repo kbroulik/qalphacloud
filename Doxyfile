@@ -1,0 +1,128 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# SPDX-FileCopyrightText: 2023 Kai Uwe Broulik <ghqalpha@broulik.de>
+
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = "QAlphaCloud"
+PROJECT_NUMBER         = 0.0.1
+PROJECT_BRIEF          = Qt bindings for Alpha Cloud
+# TODO
+PROJECT_LOGO           =
+OUTPUT_DIRECTORY       = docs
+CREATE_SUBDIRS         = NO
+ALLOW_UNICODE_NAMES    = NO
+OUTPUT_LANGUAGE        = English
+OUTPUT_TEXT_DIRECTION  = None
+
+# TODO do we want this?
+ALWAYS_DETAILED_SEC    = NO
+
+INLINE_INHERITED_MEMB  = NO
+FULL_PATH_NAMES        = YES
+
+# TODO
+STRIP_FROM_PATH        =
+# TODO
+STRIP_FROM_INC_PATH    =
+
+# TODO
+ALIASES                =
+
+MARKDOWN_SUPPORT       = YES
+
+# Do we want that?
+BUILTIN_STL_SUPPORT    = NO
+
+EXTRACT_ALL            = NO
+EXTRACT_PRIVATE        = NO
+EXTRACT_PRIV_VIRTUAL   = NO
+EXTRACT_STATIC         = NO
+EXTRACT_LOCAL_CLASSES  = YES
+EXTRACT_ANON_NSPACES   = NO
+RESOLVE_UNNAMED_PARAMS = YES
+
+
+HIDE_UNDOC_MEMBERS     = NO
+# Hide all the Private classes.
+HIDE_UNDOC_CLASSES     = YES
+
+HIDE_FRIEND_COMPOUNDS  = YES
+HIDE_IN_BODY_DOCS      = NO
+INTERNAL_DOCS          = NO
+
+CASE_SENSE_NAMES       = YES
+
+STRICT_PROTO_MATCHING  = NO
+
+# Do we want any of this?
+GENERATE_TODOLIST      = YES
+GENERATE_TESTLIST      = YES
+GENERATE_BUGLIST       = YES
+GENERATE_DEPRECATEDLIST= YES
+
+# TODO
+ENABLED_SECTIONS       =
+FILE_VERSION_FILTER    =
+LAYOUT_FILE            =
+
+QUIET                  = NO
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+WARN_NO_PARAMDOC       = NO
+WARN_AS_ERROR          = NO
+WARN_LOGFILE           =
+
+INPUT                  = src/lib
+INPUT_ENCODING         = UTF-8
+
+FILE_PATTERNS          = *.h *.cpp *.qml *.md
+
+RECURSIVE              = NO
+EXCLUDE                =
+EXCLUDE_PATTERNS       = *_p.h
+EXCLUDE_SYMBOLS        =
+
+# TODO
+EXAMPLE_PATH           =
+EXAMPLE_PATTERNS       = *
+
+IMAGE_PATH             =
+
+INPUT_FILTER           =
+
+FILTER_PATTERNS        =
+FILTER_SOURCE_FILES    = NO
+FILTER_SOURCE_PATTERNS =
+
+# You can browse it yourself :-)
+SOURCE_BROWSER         = NO
+INLINE_SOURCES         = NO
+
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+HTML_FILE_EXTENSION    = .html
+#HTML_HEADER            =
+#HTML_FOOTER            =
+# TODO make me pretty.
+#HTML_STYLESHEET        =
+#HTML_EXTRA_STYLESHEET  =
+#HTML_EXTRA_FILES       =
+#HTML_COLORSTYLE_HUE    = 220
+#HTML_COLORSTYLE_SAT    = 100
+#HTML_COLORSTYLE_GAMMA  = 80
+
+# Do we want this?
+HTML_TIMESTAMP         = NO
+
+HTML_DYNAMIC_MENUS     = YES
+# Do we want this?
+HTML_DYNAMIC_SECTIONS  = NO
+
+#DISABLE_INDEX          = NO
+
+GENERATE_TREEVIEW      = NO
+
+# TODO look at the rest of the default config...
+
+# Sorry :-)
+GENERATE_LATEX         = NO

@@ -1,0 +1,39 @@
+{
+    "code": 200,
+    "msg": "",
+    "data": [
+        {
+            "cobat": 2.01,
+            "emsStatus": "Normal",
+            "mbat": "BATA",
+            "minv": "INVA",
+            "poinv": 1,
+            "popv": 1,
+            "surplusCobat": 1.8,
+            "sysSn": "SERIALA",
+            "usCapacity": 91
+        },
+        {
+            "cobat": 3.01,
+            "emsStatus": "Normal",
+            "mbat": "BATB",
+            "minv": "INVB",
+            "poinv": 2,
+            "popv": 2,
+            "surplusCobat": 2.8,
+            "sysSn": "SERIALB",
+            "usCapacity": 92
+        },
+        {
+            "cobat": 4.01,
+            "emsStatus": "Normal",
+            "mbat": "BATC",
+            "minv": "INVC",
+            "poinv": 3,
+            "popv": 3,
+            "surplusCobat": 3.8,
+            "sysSn": "SERIALC",
+            "usCapacity": 93
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# SPDX-FileCopyrightText: 2023 Kai Uwe Broulik <ghqalpha@broulik.de>
+
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+find_dependency(Qt@QT_MAJOR_VERSION@Gui @REQUIRED_QT_VERSION@)
+
+include("${CMAKE_CURRENT_LIST_DIR}/QAlphaCloudTargets.cmake")
+@PACKAGE_INCLUDE_QCHTARGETS@

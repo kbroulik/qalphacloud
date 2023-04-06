@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# SPDX-FileCopyrightText: 2023 Kai Uwe Broulik <ghqalpha@broulik.de>
+
+module de.broulik.qalphacloud
+plugin qalphacloudqmlplugin

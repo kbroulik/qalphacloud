@@ -1,0 +1,17 @@
+{
+    "code": 200,
+    "msg": "",
+    "data": [
+        {
+            "cobat": 8.19,
+            "emsStatus": "Normal",
+            "mbat": "BATTERY",
+            "minv": "INVERTER",
+            "poinv": 10,
+            "popv": 10,
+            "surplusCobat": 7.8,
+            "sysSn": "SERIAL",
+            "usCapacity": 95
+        }
+    ]
+}

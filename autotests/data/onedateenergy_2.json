@@ -1,0 +1,15 @@
+{
+    "code": 200,
+    "msg": "",
+    "data": {
+        "eCharge": 0.1,
+        "eChargingPile": 0,
+        "eDischarge": 1.1,
+        "eGridCharge": 2.8,
+        "eInput": 3.5,
+        "eOutput": 0.1,
+        "epv": 0.2,
+        "sysSn": "SERIAL",
+        "theDate": "2023-02-27"
+    }
+}

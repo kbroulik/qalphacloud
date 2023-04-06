@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: BSD-2-Clause
+#
+# SPDX-FileCopyrightText: 2023 Kai Uwe Broulik <ghqalpha@broulik.de>
+
+name: Code Formatting
+
+on: ["push", "pull_request"]
+
+jobs:
+  doxygen:
+    strategy:
+      matrix:
+        config:
+        - {name: "Ubuntu 22.04 (GCC)", os: "ubuntu-22.04", CC: "gcc", CXX: "g++"}
+
+    name: ${{matrix.config.name}}
+    runs-on: ${{matrix.config.os}}
+
+    steps:
+    - name: Install dependencies
+      env:
+        DEBIAN_FRONTEND: "noninteractive"
+      run: sudo apt-get update && sudo apt-get install -y clang-format
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Check code formatting
+      uses: jidicula/clang-format-action@v4.11.0
+      with:
+        clang-format-version: '13'
+        check-path: 'src'
