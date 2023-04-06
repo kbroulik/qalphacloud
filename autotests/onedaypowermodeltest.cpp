@@ -8,6 +8,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QSignalSpy>
 #include <QTest>
 
 #include <QAlphaCloud/QAlphaCloud>
@@ -126,6 +127,8 @@ void OneDayPowerModelTest::testData()
 
     const QString testDataPath = QFINDTESTDATA("data/onedaypower.json");
 
+    QSignalSpy countChangedSpy(&model, &OneDayPowerModel::countChanged);
+
     m_networkAccessManager.setOverrideUrl(QUrl::fromLocalFile(testDataPath));
 
     // Load our test data.
@@ -137,6 +140,7 @@ void OneDayPowerModelTest::testData()
     QCOMPARE(model.error(), QAlphaCloud::ErrorCode::NoError);
     QVERIFY(model.errorString().isEmpty());
     QCOMPARE(model.rowCount(), 3);
+    QCOMPARE(countChangedSpy.count(), 1);
 
     // Also verify the raw JSON with the JSON from the file.
     QFile testFile(testDataPath);
@@ -197,6 +201,8 @@ void OneDayPowerModelTest::testApiError()
 
     const QString testDataPath = QFINDTESTDATA("data/api_error.json");
 
+    QSignalSpy countChangedSpy(&model, &OneDayPowerModel::countChanged);
+
     m_networkAccessManager.setOverrideUrl(QUrl::fromLocalFile(testDataPath));
 
     // Load our test data.
@@ -208,6 +214,7 @@ void OneDayPowerModelTest::testApiError()
     QCOMPARE(model.error(), QAlphaCloud::ErrorCode::ParameterError);
     QCOMPARE(model.errorString(), QStringLiteral("Parameter error"));
     QCOMPARE(model.rowCount(), 0);
+    QCOMPARE(countChangedSpy.count(), 0);
 }
 
 void OneDayPowerModelTest::testGarbledJson()
@@ -215,6 +222,8 @@ void OneDayPowerModelTest::testGarbledJson()
     OneDayPowerModel model(&m_connector, g_serialNumber, QDate::currentDate());
 
     const QString testDataPath = QFINDTESTDATA("data/garbled.json");
+
+    QSignalSpy countChangedSpy(&model, &OneDayPowerModel::countChanged);
 
     m_networkAccessManager.setOverrideUrl(QUrl::fromLocalFile(testDataPath));
 
@@ -227,6 +236,7 @@ void OneDayPowerModelTest::testGarbledJson()
     QCOMPARE(model.error(), QAlphaCloud::ErrorCode::JsonParseError);
     QVERIFY(!model.errorString().isEmpty());
     QCOMPARE(model.rowCount(), 0);
+    QCOMPARE(countChangedSpy.count(), 0);
 }
 
 QTEST_GUILESS_MAIN(OneDayPowerModelTest)

@@ -173,6 +173,10 @@ StorageSystemsModel::StorageSystemsModel(Connector *connector, QObject *parent)
     , d(std::make_unique<StorageSystemsModelPrivate>(this))
 {
     setConnector(connector);
+
+    connect(this, &StorageSystemsModel::rowsInserted, this, &StorageSystemsModel::countChanged);
+    connect(this, &StorageSystemsModel::rowsRemoved, this, &StorageSystemsModel::countChanged);
+    connect(this, &StorageSystemsModel::modelReset, this, &StorageSystemsModel::countChanged);
 }
 
 StorageSystemsModel::~StorageSystemsModel() = default;

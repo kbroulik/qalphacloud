@@ -7,6 +7,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QSignalSpy>
 #include <QTest>
 
 #include <QAlphaCloud/QAlphaCloud>
@@ -111,6 +112,8 @@ void StorageSystemsModelTest::testSingleData()
 
     const QString testDataPath = QFINDTESTDATA("data/storagesystems_single.json");
 
+    QSignalSpy countChangedSpy(&model, &StorageSystemsModel::countChanged);
+
     m_networkAccessManager.setOverrideUrl(QUrl::fromLocalFile(testDataPath));
 
     // Load our test data.
@@ -122,6 +125,7 @@ void StorageSystemsModelTest::testSingleData()
     QCOMPARE(model.error(), QAlphaCloud::ErrorCode::NoError);
     QVERIFY(model.errorString().isEmpty());
     QCOMPARE(model.rowCount(), 1);
+    QCOMPARE(countChangedSpy.count(), 1);
 
     const QModelIndex idx = model.index(0);
     QVERIFY(idx.isValid());
@@ -176,6 +180,8 @@ void StorageSystemsModelTest::testMultipleData()
 
     const QString testDataPath = QFINDTESTDATA("data/storagesystems_multiple.json");
 
+    QSignalSpy countChangedSpy(&model, &StorageSystemsModel::countChanged);
+
     m_networkAccessManager.setOverrideUrl(QUrl::fromLocalFile(testDataPath));
 
     // Load our test data.
@@ -187,6 +193,7 @@ void StorageSystemsModelTest::testMultipleData()
     QCOMPARE(model.error(), QAlphaCloud::ErrorCode::NoError);
     QVERIFY(model.errorString().isEmpty());
     QCOMPARE(model.rowCount(), 3);
+    QCOMPARE(countChangedSpy.count(), 1);
 
     QCOMPARE(model.primarySerialNumber(), QStringLiteral("SERIALA"));
 
@@ -235,6 +242,8 @@ void StorageSystemsModelTest::testReload()
     const QString testDataSinglePath = QFINDTESTDATA("data/storagesystems_single.json");
     const QString testDataMultiplePath = QFINDTESTDATA("data/storagesystems_multiple.json");
 
+    QSignalSpy countChangedSpy(&model, &StorageSystemsModel::countChanged);
+
     m_networkAccessManager.setOverrideUrl(QUrl::fromLocalFile(testDataSinglePath));
 
     // Load our first test data.
@@ -246,6 +255,7 @@ void StorageSystemsModelTest::testReload()
     QCOMPARE(model.error(), QAlphaCloud::ErrorCode::NoError);
     QVERIFY(model.errorString().isEmpty());
     QCOMPARE(model.rowCount(), 1);
+    QCOMPARE(countChangedSpy.count(), 1);
 
     // We already verified that the data stuff works in the tests before, so just check one role here.
     using Roles = StorageSystemsModel::Roles;
@@ -265,6 +275,7 @@ void StorageSystemsModelTest::testReload()
     QCOMPARE(model.error(), QAlphaCloud::ErrorCode::NoError);
     QVERIFY(model.errorString().isEmpty());
     QCOMPARE(model.rowCount(), 3);
+    QCOMPARE(countChangedSpy.count(), 2);
 
     QString suffix;
     for (int i = 0; i < 3; ++i) {
@@ -284,6 +295,8 @@ void StorageSystemsModelTest::testApiError()
 
     const QString testDataPath = QFINDTESTDATA("data/api_error.json");
 
+    QSignalSpy countChangedSpy(&model, &StorageSystemsModel::countChanged);
+
     m_networkAccessManager.setOverrideUrl(QUrl::fromLocalFile(testDataPath));
 
     // Load our test data.
@@ -295,6 +308,7 @@ void StorageSystemsModelTest::testApiError()
     QCOMPARE(model.error(), QAlphaCloud::ErrorCode::ParameterError);
     QCOMPARE(model.errorString(), QStringLiteral("Parameter error"));
     QCOMPARE(model.rowCount(), 0);
+    QCOMPARE(countChangedSpy.count(), 0);
 }
 
 void StorageSystemsModelTest::testGarbledJson()
@@ -302,6 +316,8 @@ void StorageSystemsModelTest::testGarbledJson()
     StorageSystemsModel model(&m_connector);
 
     const QString testDataPath = QFINDTESTDATA("data/garbled.json");
+
+    QSignalSpy countChangedSpy(&model, &StorageSystemsModel::countChanged);
 
     m_networkAccessManager.setOverrideUrl(QUrl::fromLocalFile(testDataPath));
 
@@ -314,6 +330,7 @@ void StorageSystemsModelTest::testGarbledJson()
     QCOMPARE(model.error(), QAlphaCloud::ErrorCode::JsonParseError);
     QVERIFY(!model.errorString().isEmpty());
     QCOMPARE(model.rowCount(), 0);
+    QCOMPARE(countChangedSpy.count(), 0);
 }
 
 void StorageSystemsModelTest::testReloadError()
@@ -322,6 +339,8 @@ void StorageSystemsModelTest::testReloadError()
 
     const QString testDataGoodPath = QFINDTESTDATA("data/storagesystems_single.json");
     const QString testDataBadPath = QFINDTESTDATA("data/garbled.json");
+
+    QSignalSpy countChangedSpy(&model, &StorageSystemsModel::countChanged);
 
     m_networkAccessManager.setOverrideUrl(QUrl::fromLocalFile(testDataGoodPath));
 
@@ -332,6 +351,7 @@ void StorageSystemsModelTest::testReloadError()
 
     QTRY_COMPARE(model.status(), QAlphaCloud::RequestStatus::Finished);
     QCOMPARE(model.rowCount(), 1);
+    QCOMPARE(countChangedSpy.count(), 1);
 
     const QModelIndex idx1 = model.index(0);
     QVERIFY(idx1.isValid());
@@ -354,6 +374,7 @@ void StorageSystemsModelTest::testReloadError()
 
     // ...but still our old data
     QCOMPARE(model.rowCount(), 1);
+    QCOMPARE(countChangedSpy.count(), 1);
 
     const QModelIndex idx2 = model.index(0);
     QVERIFY(idx2.isValid());
