@@ -115,14 +115,14 @@ cmake --install .
 
 ### Configure Options
 
-By default, all features and dependencies (except unittests and example code) are enabled. You can disable any feature by passing the relevant `-DFEATURE=OFF` switch to the `cmake` command:
+By default, all features and dependencies (except example code) are enabled. You can disable any feature by passing the relevant `-DFEATURE=OFF` switch to the `cmake` command:
 
 | Option | Default | Description
 | - | - | - |
 | **BUILD_QML** | **ON** | Build QML bindings
 | **BUILD_KSYSTEMSTATS** | **ON** | Build KSystemStats plug-in
 | **BUILD_KINFOCENTER** | **ON** | Build KInfoCenter module
-| **BUILD_TESTING** | **OFF** | Build unit tests
+| **BUILD_TESTING** | **ON** | Build unit tests
 | **BUILD_COVERAGE** | **OFF** | Build with test coverage (*gcov*) enabled
 | **BUILD_EXAMPLES** | **OFF** | Build examples in the [examples](examples/) directory
 | **API_URL** | https://openapi.alphaess.com/api/ | API URL to use, defaults to the official endpoint

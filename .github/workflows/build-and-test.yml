@@ -91,7 +91,7 @@ jobs:
         CXX: ${{matrix.config.CXX}}
         BUILD_DIR: "build/"
       run: |
-        cmake -B ${BUILD_DIR} -DBUILD_EXAMPLES=ON
+        cmake -B ${BUILD_DIR} -DBUILD_EXAMPLES=ON -DBUILD_TESTING=OFF
 
     - name: Build
       env:
