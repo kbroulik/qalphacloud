@@ -5,7 +5,7 @@
 
 #include "lastpowerdata.h"
 
-#include "apirequest.h"
+#include "apirequest_p.h"
 #include "qalphacloud_log.h"
 #include "utils_p.h"
 
