@@ -1,10 +1,8 @@
 {
-    "Categories": "Qt;KDE;X-KDE-information;",
     "KPlugin": {
         "Description": "Solar and Energy Consumption Statistics",
         "FormFactors": [
             "desktop",
-            "tablet",
             "handset"
         ],
         "Icon": "weather-clouds",
@@ -12,6 +10,5 @@
     },
     "X-KDE-KInfoCenter-Category": "basic_information",
     "X-KDE-Keywords": "Battery,Energy,Solar,Photovoltaic,Grid,Power,Statistics,Electricity",
-    "X-KDE-ParentApp": "kinfocenter",
     "X-KDE-Weight": 2
 }
