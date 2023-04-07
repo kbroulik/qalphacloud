@@ -14,7 +14,7 @@ target_sources(qalphacloud PRIVATE
     qalphacloud.cpp
     qalphacloud.h
     apirequest.cpp
-    apirequest.h
+    apirequest_p.h
     configuration.cpp
     configuration.h
     connector.cpp

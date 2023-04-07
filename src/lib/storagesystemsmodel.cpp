@@ -5,7 +5,7 @@
 
 #include "storagesystemsmodel.h"
 
-#include "apirequest.h"
+#include "apirequest_p.h"
 #include "connector.h"
 #include "qalphacloud.h"
 #include "qalphacloud_log.h"

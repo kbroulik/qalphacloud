@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#include "apirequest.h"
+#include "apirequest_p.h"
 
 #include "connector.h"
 #include "qalphacloud_log.h"
