@@ -115,7 +115,7 @@ cmake --install .
 
 ### Configure Options
 
-By default, all features and dependencies (except example code) are enabled. You can disable any feature by passing the relevant `-DFEATURE=OFF` switch to the `cmake` command:
+By default, all features and dependencies (except example code) are enabled. You can disable any feature by passing the relevant `-DBUILD_...=OFF` switch to the `cmake` command:
 
 | Option | Default | Description
 | - | - | - |
