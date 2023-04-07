@@ -14,7 +14,6 @@
 #include <optional>
 #include <ratio>
 #include <type_traits>
-#include <variant>
 
 /**
  * @brief Utility namespace
