@@ -8,3 +8,5 @@ docs/*
 coverage/*
 coverage.info
 *.kate-swp
+.cache
+compile_commands.json
