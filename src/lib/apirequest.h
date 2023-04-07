@@ -12,8 +12,6 @@
 #include <QPointer>
 #include <QString>
 
-#include <variant>
-
 #include "qalphacloud.h"
 
 class QTimer;
