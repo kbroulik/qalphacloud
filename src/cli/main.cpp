@@ -27,10 +27,8 @@
 
 #include "qalphacloud_version.h"
 
-bool g_jsonOutput = false;
-int g_updateInterval = 0;
-
-QTimer *g_followTimer = nullptr;
+static bool g_jsonOutput = false;
+static int g_updateInterval = 0;
 
 using namespace QAlphaCloud;
 using namespace std;
