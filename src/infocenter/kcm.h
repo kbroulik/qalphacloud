@@ -36,5 +36,4 @@ class KCMAlphaCloud : public KQuickAddons::ConfigModule
 
 public:
     explicit KCMAlphaCloud(QObject *parent, const KPluginMetaData &data, const QVariantList &args);
-    ~KCMAlphaCloud() override;
 };

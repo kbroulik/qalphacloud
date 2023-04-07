@@ -53,6 +53,4 @@ KCMAlphaCloud::KCMAlphaCloud(QObject *parent, const KPluginMetaData &data, const
     setButtons(KQuickAddons::ConfigModule::NoAdditionalButton);
 }
 
-KCMAlphaCloud::~KCMAlphaCloud() = default;
-
 #include "kcm.moc"
