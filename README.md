@@ -134,7 +134,7 @@ The library makes use of [Categorized Logging](https://doc.qt.io/qt-5/qloggingca
 
 You can enable all debug output by running an application with:
 ```
-QT_LOGGING_RULES=qalphacloud*=true
+QT_LOGGING_RULES='qalphacloud*=true'
 ```
 
 ### Dependencies
