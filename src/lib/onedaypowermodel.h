@@ -237,7 +237,7 @@ Q_SIGNALS:
     void countChanged();
 
 private:
-    friend class OneDayPowerModelPrivate;
+    friend OneDayPowerModelPrivate;
     std::unique_ptr<OneDayPowerModelPrivate> const d;
 };
 

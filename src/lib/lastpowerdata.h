@@ -184,7 +184,6 @@ public Q_SLOTS:
     void reset();
 
 private:
-    friend class LastPowerDataPrivate;
     std::unique_ptr<LastPowerDataPrivate> const d;
 };
 
