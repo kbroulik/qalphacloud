@@ -78,7 +78,7 @@ bool ApiRequest::send()
 
     auto *configuration = m_connector->configuration();
     if (!configuration) {
-        qCCritical(QALPHACLOUD_LOG) << "Cannot send request on a Connector without no configuration";
+        qCCritical(QALPHACLOUD_LOG) << "Cannot send request on a Connector with no configuration";
         return false;
     }
 
