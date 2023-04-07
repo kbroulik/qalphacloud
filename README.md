@@ -22,6 +22,7 @@
   - [API Keys](#api-keys)
   - [Build](#build)
   - [Configure Options](#configure-options)
+  - [Logging Categories](#logging-categories)
   - [Dependencies](#dependencies)
 - [API](#electric_plug-api)
   - [Classes](#classes)
@@ -126,6 +127,15 @@ By default, all features and dependencies (except example code) are enabled. You
 | **BUILD_COVERAGE** | **OFF** | Build with test coverage (*gcov*) enabled
 | **BUILD_EXAMPLES** | **OFF** | Build examples in the [examples](examples/) directory
 | **API_URL** | https://openapi.alphaess.com/api/ | API URL to use, defaults to the official endpoint
+
+### Logging Categories
+
+The library makes use of [Categorized Logging](https://doc.qt.io/qt-5/qloggingcategory.html#configuring-categories) under the **qalphacloud** identifier.
+
+You can enable all debug output by running an application with:
+```
+QT_LOGGING_RULES=qalphacloud*=true
+```
 
 ### Dependencies
 
