@@ -229,7 +229,6 @@ public Q_SLOTS:
     void reset();
 
 private:
-    friend class OneDateEnergyPrivate;
     std::unique_ptr<OneDateEnergyPrivate> const d;
 };
 

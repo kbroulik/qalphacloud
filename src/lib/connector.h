@@ -77,7 +77,6 @@ public:
     void setNetworkAccessManager(QNetworkAccessManager *networkAccessManager);
 
 private:
-    friend class ConnectorPrivate;
     std::unique_ptr<ConnectorPrivate> const d;
 };
 

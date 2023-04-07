@@ -139,7 +139,7 @@ Q_SIGNALS:
     void countChanged();
 
 private:
-    friend class StorageSystemsModelPrivate;
+    friend StorageSystemsModelPrivate;
     std::unique_ptr<StorageSystemsModelPrivate> const d;
 };
 

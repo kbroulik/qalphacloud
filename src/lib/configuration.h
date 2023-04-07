@@ -143,7 +143,6 @@ public Q_SLOTS:
     bool loadDefault();
 
 private:
-    friend class ConfigurationPrivate;
     std::unique_ptr<ConfigurationPrivate> const d;
 };
 
