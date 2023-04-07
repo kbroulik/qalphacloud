@@ -74,8 +74,13 @@ Q_DECLARE_TYPEINFO(PowerEntry, Q_MOVABLE_TYPE);
 namespace QAlphaCloud
 {
 
-struct OneDayPowerModelPrivate {
-    OneDayPowerModelPrivate(OneDayPowerModel *q);
+class OneDayPowerModelPrivate
+{
+public:
+    OneDayPowerModelPrivate(OneDayPowerModel *qq)
+        : q(qq)
+    {
+    }
 
     void setFromDateTime(const QDateTime &fromDateTime);
     void setToDateTime(const QDateTime &toDateTime);
@@ -116,11 +121,6 @@ struct OneDayPowerModelPrivate {
 
     QHash<QDate, QJsonArray> m_cache;
 };
-
-OneDayPowerModelPrivate::OneDayPowerModelPrivate(OneDayPowerModel *q)
-    : q(q)
-{
-}
 
 void OneDayPowerModelPrivate::setFromDateTime(const QDateTime &fromDateTime)
 {

@@ -89,8 +89,13 @@ Q_DECLARE_TYPEINFO(StorageSystem, Q_MOVABLE_TYPE);
 namespace QAlphaCloud
 {
 
-struct StorageSystemsModelPrivate {
-    explicit StorageSystemsModelPrivate(StorageSystemsModel *q);
+class StorageSystemsModelPrivate
+{
+public:
+    explicit StorageSystemsModelPrivate(StorageSystemsModel *qq)
+        : q(qq)
+    {
+    }
 
     void setStatus(RequestStatus status);
     void setError(ErrorCode error);
@@ -109,11 +114,6 @@ struct StorageSystemsModelPrivate {
 
     QVector<StorageSystem> m_data;
 };
-
-StorageSystemsModelPrivate::StorageSystemsModelPrivate(StorageSystemsModel *q)
-    : q(q)
-{
-}
 
 void StorageSystemsModelPrivate::setStatus(RequestStatus status)
 {
