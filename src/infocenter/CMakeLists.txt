@@ -6,7 +6,7 @@ kcoreaddons_add_plugin(kcm_qalphacloud SOURCES
     kcm.h
 
     INSTALL_NAMESPACE
-    "plasma/kcms"
+    "plasma/kcms/kinfocenter"
 )
 
 target_link_libraries(kcm_qalphacloud
