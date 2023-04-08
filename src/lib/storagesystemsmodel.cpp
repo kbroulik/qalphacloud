@@ -176,26 +176,24 @@ void StorageSystemsModelPrivate::processApiResult(const QJsonArray &jsonArray)
         }
     }
 
-    if (!dirty) {
-        return;
-    }
+    if (dirty) {
+        const QString oldPrimarySerialNumber = q->primarySerialNumber();
 
-    const QString oldPrimarySerialNumber = q->primarySerialNumber();
+        q->beginResetModel();
 
-    q->beginResetModel();
+        m_data.clear();
 
-    m_data.clear();
+        m_data.reserve(jsonArray.count());
 
-    m_data.reserve(jsonArray.count());
+        for (const QJsonValue &systemValue : jsonArray) {
+            m_data << StorageSystem::fromJson(systemValue.toObject());
+        }
 
-    for (const QJsonValue &systemValue : jsonArray) {
-        m_data << StorageSystem::fromJson(systemValue.toObject());
-    }
+        q->endResetModel();
 
-    q->endResetModel();
-
-    if (oldPrimarySerialNumber != q->primarySerialNumber()) {
-        Q_EMIT q->primarySerialNumberChanged(q->primarySerialNumber());
+        if (oldPrimarySerialNumber != q->primarySerialNumber()) {
+            Q_EMIT q->primarySerialNumberChanged(q->primarySerialNumber());
+        }
     }
 
     setStatus(QAlphaCloud::RequestStatus::Finished);
