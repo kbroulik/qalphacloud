@@ -393,8 +393,6 @@ bool StorageSystemsModel::reload()
         d->m_request = nullptr;
     }
 
-    d->setStatus(QAlphaCloud::RequestStatus::Loading);
-
     auto *request = new ApiRequest(d->m_connector, ApiRequest::EndPoint::EssList, this);
 
     connect(request, &ApiRequest::errorOccurred, this, [this, request] {
@@ -417,6 +415,8 @@ bool StorageSystemsModel::reload()
 
     if (ok) {
         d->m_request = request;
+
+        d->setStatus(QAlphaCloud::RequestStatus::Loading);
     }
 
     return ok;

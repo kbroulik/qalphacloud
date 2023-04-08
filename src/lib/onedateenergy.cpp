@@ -310,8 +310,6 @@ bool OneDateEnergy::reload()
         d->m_request = nullptr;
     }
 
-    d->setStatus(RequestStatus::Loading);
-
     const auto cachedData = d->m_cache.value(date);
     if (!cachedData.isEmpty()) {
         d->processApiResult(cachedData);
@@ -340,9 +338,15 @@ bool OneDateEnergy::reload()
         }
     });
 
-    request->send();
+    const bool ok = request->send();
 
-    return true;
+    if (ok) {
+        d->m_request = request;
+
+        d->setStatus(QAlphaCloud::RequestStatus::Loading);
+    }
+
+    return ok;
 }
 
 bool OneDateEnergy::forceReload()

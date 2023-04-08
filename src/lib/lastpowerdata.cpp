@@ -235,8 +235,6 @@ bool LastPowerData::reload()
         d->m_request = nullptr;
     }
 
-    d->setStatus(RequestStatus::Loading);
-
     auto *request = new ApiRequest(d->m_connector, ApiRequest::EndPoint::LastPowerData, this);
     request->setSysSn(d->m_serialNumber);
 
@@ -252,11 +250,15 @@ bool LastPowerData::reload()
         d->processApiResult(json);
     });
 
-    request->send();
+    const bool ok = request->send();
 
-    d->m_request = request;
+    if (ok) {
+        d->m_request = request;
 
-    return true;
+        d->setStatus(QAlphaCloud::RequestStatus::Loading);
+    }
+
+    return ok;
 }
 
 void LastPowerData::reset()

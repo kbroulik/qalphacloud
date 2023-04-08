@@ -456,8 +456,6 @@ bool OneDayPowerModel::reload()
         d->m_request = nullptr;
     }
 
-    d->setStatus(QAlphaCloud::RequestStatus::Loading);
-
     const auto cachedData = d->m_cache.value(date);
     if (!cachedData.isEmpty()) {
         d->processApiResult(cachedData);
@@ -486,11 +484,15 @@ bool OneDayPowerModel::reload()
         }
     });
 
-    request->send();
+    const bool ok = request->send();
 
-    d->m_request = request;
+    if (ok) {
+        d->m_request = request;
 
-    return true;
+        d->setStatus(QAlphaCloud::RequestStatus::Loading);
+    }
+
+    return ok;
 }
 
 bool OneDayPowerModel::forceReload()
