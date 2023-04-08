@@ -22,7 +22,7 @@ KCM.SimpleKCM {
     id: root
 
     // TODO minimum size
-    implicitWidth: Kirigami.Units.gridUnit * 38
+    implicitWidth: Kirigami.Units.gridUnit * 40
     implicitHeight: Kirigami.Units.gridUnit * 22
 
     readonly property string currentSerialNumber: systemCombo.currentValue || ""
