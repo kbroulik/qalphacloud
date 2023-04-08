@@ -72,7 +72,7 @@ WARN_NO_PARAMDOC       = NO
 WARN_AS_ERROR          = NO
 WARN_LOGFILE           =
 
-INPUT                  = src/lib
+INPUT                  = README.md src/lib
 INPUT_ENCODING         = UTF-8
 
 FILE_PATTERNS          = *.h *.cpp *.qml *.md
@@ -126,3 +126,5 @@ GENERATE_TREEVIEW      = NO
 
 # Sorry :-)
 GENERATE_LATEX         = NO
+
+USE_MDFILE_AS_MAINPAGE = README.md
