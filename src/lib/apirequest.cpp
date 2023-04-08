@@ -166,9 +166,10 @@ bool ApiRequest::send()
 
             if (error.error != QJsonParseError::NoError) {
                 m_error = ErrorCode::JsonParseError;
-                m_errorString = error.errorString();
+                m_errorString = QAlphaCloud::errorText(m_error, error.errorString());
             } else if (!jsonDocument.isObject()) {
                 m_error = ErrorCode::UnexpectedJsonDataError;
+                m_errorString = QAlphaCloud::errorText(m_error, jsonDocument);
             } else {
                 const QJsonObject jsonObject = jsonDocument.object();
                 if (jsonObject.isEmpty()) {
@@ -177,8 +178,9 @@ bool ApiRequest::send()
                     code = jsonObject.value(QStringLiteral("code")).toInt();
                     if (code != 200) {
                         m_error = static_cast<QAlphaCloud::ErrorCode>(code);
+                        const QString msg = jsonObject.value(QStringLiteral("msg")).toString();
+                        m_errorString = QAlphaCloud::errorText(m_error, msg);
                     }
-                    m_errorString = jsonObject.value(QStringLiteral("msg")).toString();
 
                     m_data = jsonObject.value(QStringLiteral("data"));
                 }
