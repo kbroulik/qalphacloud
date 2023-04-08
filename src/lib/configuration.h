@@ -148,6 +148,7 @@ public Q_SLOTS:
     bool loadFromSettings(QSettings *settings);
     /**
      * @brief Load the default configuration
+     *
      * It will be loaded from the configuration file.
      * @return Whether the configuration could be loaded and is valid.
      */
