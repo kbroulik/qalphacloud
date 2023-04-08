@@ -4,9 +4,12 @@
  */
 
 #include <QSignalSpy>
+#include <QStandardPaths>
 #include <QTest>
 
 #include <QAlphaCloud/Configuration>
+
+#include <memory>
 
 #include "config-alphacloud.h"
 
@@ -21,12 +24,26 @@ class ConfigurationTest : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
+    void cleanupTestCase();
+
     void testLoadFromFile();
     void testLoadFromEmptyFile();
     void testLoadFromBrokenFile();
+    void testDefault();
     // TODO test load from QSettings.
     // TODO test resetApiUrl/resetTimeout
 };
+
+void ConfigurationTest::initTestCase()
+{
+    QStandardPaths::setTestModeEnabled(true);
+}
+
+void ConfigurationTest::cleanupTestCase()
+{
+    QFile::remove(Configuration::defaultConfigurationPath());
+}
 
 void ConfigurationTest::testLoadFromFile()
 {
@@ -76,6 +93,18 @@ void ConfigurationTest::testLoadFromBrokenFile()
     QVERIFY(config.appId().isEmpty());
     QVERIFY(config.appSecret().isEmpty());
     QCOMPARE(config.requestTimeout(), g_defaultTimeout);
+}
+
+void ConfigurationTest::testDefault()
+{
+    const QString testConfig = QFINDTESTDATA("data/qalphacloud.ini");
+    QFile::copy(testConfig, Configuration::defaultConfigurationPath());
+
+    auto config = std::unique_ptr<Configuration>(Configuration::defaultConfiguration(nullptr));
+    QVERIFY(config->valid());
+    QCOMPARE(config->apiUrl(), QUrl(QStringLiteral("https://www.example.com/api/")));
+    QCOMPARE(config->appId(), QStringLiteral("alpha123456"));
+    QCOMPARE(config->appSecret(), QStringLiteral("abc123456789"));
 }
 
 QTEST_GUILESS_MAIN(ConfigurationTest)

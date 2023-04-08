@@ -9,6 +9,7 @@
 #include "qalphacloud_log.h"
 
 #include <QSettings>
+#include <QStandardPaths>
 
 namespace QAlphaCloud
 {
@@ -38,6 +39,11 @@ Configuration *Configuration::defaultConfiguration(QObject *parent)
     auto *configuration = new Configuration(parent);
     configuration->loadDefault();
     return configuration;
+}
+
+QString Configuration::defaultConfigurationPath()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1String("/qalphacloud.ini");
 }
 
 QUrl Configuration::apiUrl() const
@@ -181,8 +187,7 @@ bool Configuration::loadFromSettings(QSettings *settings)
 
 bool Configuration::loadDefault()
 {
-    QSettings settings(QStringLiteral("Broulik"), QStringLiteral("QAlphaCloud"));
-    return loadFromSettings(&settings);
+    return loadFromFile(defaultConfigurationPath());
 }
 
 } // namespace QAlphaCloud
