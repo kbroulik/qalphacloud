@@ -3,19 +3,4 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#include "qalphacloud.h"
-
-#include <QMetaType>
-
-namespace QAlphaCloud
-{
-
-struct InitQAlphaCloud {
-    InitQAlphaCloud()
-    {
-    }
-};
-
-static InitQAlphaCloud s_init;
-
-} // namespace QAlphaCloud
+// Nothing to see here yet.
