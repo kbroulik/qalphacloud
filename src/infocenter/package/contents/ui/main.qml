@@ -515,40 +515,6 @@ KCM.SimpleKCM {
                         }]
                     }
                 }
-
-                /*ColumnLayout {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.preferredWidth: 1
-
-                    PieChart {
-                        id: batteryPie
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        color: root.batteryGreen
-                        // Use at least 1 so the chart doesn't completely disappear.
-                        totalValue: Math.max(1, storageSystems.batteryGrossCapacity)
-                        highlightValue: storageSystems.batteryRemainingCapacity
-                        title: root.formatAsKilowattHours(storageSystems.batteryRemainingCapacity)
-                        text: qsTr("Capacity")
-                    }
-
-                    PieLegend {
-                        Layout.fillWidth: true
-                        model: [{
-                            text: qsTr("Usable"),
-                            color: batteryPie.color,
-                            value: root.formatAsPercent(storageSystems.batteryUsableCapacity / 100),
-                            valid: storageSystems.valid
-                        }, {
-                            text: qsTr("Gross Capacity"),
-                            color: batteryPie.backgroundColor,
-                            value: qsTr("%1 – %2").arg(root.formatAsPercent(cumulativeData.output / cumulativeData.photovoltaic))
-                                                  .arg(root.formatAsKilowattHours(cumulativeData.output)),
-                            valid: storageSystems.valid
-                        }]
-                    }
-                }*/
             }
         }
 
