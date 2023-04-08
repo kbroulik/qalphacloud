@@ -74,7 +74,9 @@ KCM.SimpleKCM {
 
     QAlphaCloud.Connector {
         id: cloudConnector
-        configuration: QAlphaCloud.Configuration {}
+        configuration: QAlphaCloud.Configuration {
+            id: cloudConfig
+        }
         Component.onCompleted: {
             storageSystems.reload();
         }
@@ -192,6 +194,11 @@ KCM.SimpleKCM {
         }
     }
 
+    component ReloadAction : QQC2.Action {
+        text: qsTr("Reload")
+        icon.name: "view-refresh"
+    }
+
     header: RowLayout {
         // HACK add padding
         Item {
@@ -210,6 +217,8 @@ KCM.SimpleKCM {
                 running: !liveData.valid && liveData.status === QAlphaCloud.QAlphaCloud.RequestStatus.Loading
             }
         }
+
+        // TODO show text when loading live data failed.
 
         RowLayout {
             opacity: liveData.valid ? 1 : 0
@@ -308,7 +317,8 @@ KCM.SimpleKCM {
         ColumnLayout {
             Layout.topMargin: 5
             Layout.bottomMargin: 5
-            opacity: storageSystems.status === QAlphaCloud.QAlphaCloud.RequestStatus.Finished ? 1 : 0
+            // As long as we have data, live or cached.
+            opacity: storageSystems.count > 0
             Behavior on opacity {
                 OpacityAnimator {
                     duration: Kirigami.Units.shortDuration
@@ -416,12 +426,30 @@ KCM.SimpleKCM {
 
     QQC2.BusyIndicator {
         anchors.centerIn: parent
-        running: storageSystems.status === QAlphaCloud.QAlphaCloud.RequestStatus.Loading
+        running: storageSystems.count === 0 && storageSystems.status === QAlphaCloud.QAlphaCloud.RequestStatus.Loading
+    }
+
+    Kirigami.PlaceholderMessage {
+        anchors.verticalCenter: parent.verticalCenter
+        width: parent.width
+        icon.name: "dialog-error"
+        text: qsTr("Invalid configuration")
+        explanation: qsTr("There has been no valid API URL, application ID, or application secret provided in the configuration file.")
+        visible: !cloudConfig.valid
+    }
+
+    Kirigami.PlaceholderMessage {
+        anchors.verticalCenter: parent.verticalCenter
+        width: parent.width
+        icon.name: "dialog-error"
+        text: qsTr("Failed to load storage systems")
+        explanation: storageSystems.errorString
+        visible: storageSystems.count === 0 && storageSystems.status === QAlphaCloud.QAlphaCloud.RequestStatus.Error
     }
 
     RowLayout {
         anchors.fill: parent
-        opacity: storageSystems.status === QAlphaCloud.QAlphaCloud.RequestStatus.Finished ? 1 : 0
+        opacity: cloudConfig.valid && storageSystems.count > 0
         Behavior on opacity {
             OpacityAnimator {
                 duration: Kirigami.Units.shortDuration
@@ -438,6 +466,25 @@ KCM.SimpleKCM {
                 id: cumulativeBusy
                 anchors.centerIn: parent
                 running: !cumulativeData.valid && cumulativeData.status === QAlphaCloud.QAlphaCloud.RequestStatus.Loading
+            }
+
+            Kirigami.PlaceholderMessage {
+                anchors.fill: parent
+                visible: !cumulativeData.valid && historyModel.status === QAlphaCloud.QAlphaCloud.RequestStatus.Finished
+                text: qsTr("No cumulative data available for this date.")
+            }
+
+            Kirigami.PlaceholderMessage {
+                anchors.fill: parent
+                visible: !cumulativeData.valid && cumulativeData.status === QAlphaCloud.QAlphaCloud.RequestStatus.Error
+                icon.name: "dialog-error"
+                text: qsTr("Failed to load cumulative data.")
+                explanation: cumulativeData.errorString
+                helpfulAction: ReloadAction {
+                    onTriggered: {
+                        cumulativeData.reload();
+                    }
+                }
             }
 
             RowLayout {
@@ -542,6 +589,19 @@ KCM.SimpleKCM {
                 anchors.fill: parent
                 visible: historyModel.count === 0 && historyModel.status === QAlphaCloud.QAlphaCloud.RequestStatus.Finished
                 text: qsTr("No historic data available for this date.")
+            }
+
+            Kirigami.PlaceholderMessage {
+                anchors.fill: parent
+                visible: historyModel.count === 0 && historyModel.status === QAlphaCloud.QAlphaCloud.RequestStatus.Error
+                icon.name: "dialog-error"
+                text: qsTr("Failed to load history data.")
+                explanation: historyModel.errorString
+                helpfulAction: ReloadAction {
+                    onTriggered: {
+                        historyModel.reload();
+                    }
+                }
             }
 
             ColumnLayout {
