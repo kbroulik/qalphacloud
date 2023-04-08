@@ -33,6 +33,7 @@ private Q_SLOTS:
     void testSingleData();
     void testMultipleData();
     void testReload();
+    void testReloadSameData();
     void testCache();
 
     void testApiError();
@@ -305,6 +306,43 @@ void StorageSystemsModelTest::testReload()
         const QString serialNumber = idx.data(static_cast<int>(Roles::SerialNumber)).toString();
         QCOMPARE(serialNumber, QStringLiteral("SERIAL") + suffix);
     }
+}
+
+void StorageSystemsModelTest::testReloadSameData()
+{
+    StorageSystemsModel model(&m_connector);
+    model.setCached(false);
+
+    const QString testDataPath = QFINDTESTDATA("data/storagesystems_single.json");
+
+    QSignalSpy countChangedSpy(&model, &StorageSystemsModel::countChanged);
+
+    m_networkAccessManager.setOverrideUrl(QUrl::fromLocalFile(testDataPath));
+
+    // Load our test data.
+    QVERIFY(model.reload());
+
+    QCOMPARE(model.status(), QAlphaCloud::RequestStatus::Loading);
+
+    QTRY_COMPARE(model.status(), QAlphaCloud::RequestStatus::Finished);
+    QCOMPARE(model.error(), QAlphaCloud::ErrorCode::NoError);
+    QVERIFY(model.errorString().isEmpty());
+    QCOMPARE(model.rowCount(), 1);
+    QCOMPARE(countChangedSpy.count(), 1);
+
+    // We already verified that the data stuff works in the tests before.
+
+    // Load our test data again.
+    QVERIFY(model.reload());
+
+    QCOMPARE(model.status(), QAlphaCloud::RequestStatus::Loading);
+
+    QTRY_COMPARE(model.status(), QAlphaCloud::RequestStatus::Finished);
+    QCOMPARE(model.error(), QAlphaCloud::ErrorCode::NoError);
+    QVERIFY(model.errorString().isEmpty());
+    // No change here
+    QCOMPARE(model.rowCount(), 1);
+    QCOMPARE(countChangedSpy.count(), 1);
 }
 
 void StorageSystemsModelTest::testCache()
