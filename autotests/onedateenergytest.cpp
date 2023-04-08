@@ -9,9 +9,9 @@
 #include <QJsonObject>
 #include <QTest>
 
-#include <QAlphaCloud/QAlphaCloud>
 #include <QAlphaCloud/Connector>
 #include <QAlphaCloud/OneDateEnergy>
+#include <QAlphaCloud/QAlphaCloud>
 
 #include "testnetworkaccessmanager.h"
 
@@ -129,8 +129,8 @@ void OneDateEnergyTest::testData()
     QCOMPARE(energy.photovoltaic(), 20100); // WattHours.
     QCOMPARE(energy.input(), 30);
     QCOMPARE(energy.output(), 14630);
-    //QCOMPARE(energy.charge(), 2800);
-    //QCOMPARE(energy.discharge(), 1000);
+    // QCOMPARE(energy.charge(), 2800);
+    // QCOMPARE(energy.discharge(), 1000);
     QCOMPARE(energy.gridCharge(), 10);
 
     // Also verify the raw JSON with the JSON from the file.
@@ -162,8 +162,8 @@ void OneDateEnergyTest::testData()
     QCOMPARE(energy.photovoltaic(), 200); // WattHours.
     QCOMPARE(energy.input(), 3500);
     QCOMPARE(energy.output(), 100);
-    //QCOMPARE(energy.charge(), 100);
-    //QCOMPARE(energy.discharge(), 1100);
+    // QCOMPARE(energy.charge(), 100);
+    // QCOMPARE(energy.discharge(), 1100);
     QCOMPARE(energy.gridCharge(), 2800);
 
     // Also verify the raw JSON with the JSON from the file.

@@ -35,13 +35,12 @@ LiveDataWidget::LiveDataWidget(QWidget *parent)
     config->setAppId(QStringLiteral("alpha..."));
     config->setAppSecret(QStringLiteral("..."));
     // or use this to load it from the QAlphaCloud config file.
-    //config->loadDefault();
+    // config->loadDefault();
 
     m_connector->setConfiguration(config);
 
     // Hook up the storage systems model signals.
-    connect(m_storageSystems, &StorageSystemsModel::statusChanged,
-            this, &LiveDataWidget::onStorageSystemsModelStatusChanged);
+    connect(m_storageSystems, &StorageSystemsModel::statusChanged, this, &LiveDataWidget::onStorageSystemsModelStatusChanged);
 
     // Set up live data. It needs a connector.
     m_liveData->setConnector(m_connector);

@@ -8,7 +8,6 @@
 TestNetworkAccessManager::TestNetworkAccessManager(QObject *parent)
     : QNetworkAccessManager(parent)
 {
-
 }
 
 TestNetworkAccessManager::~TestNetworkAccessManager() = default;

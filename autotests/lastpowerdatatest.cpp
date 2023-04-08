@@ -8,9 +8,9 @@
 #include <QJsonObject>
 #include <QTest>
 
-#include <QAlphaCloud/QAlphaCloud>
 #include <QAlphaCloud/Connector>
 #include <QAlphaCloud/LastPowerData>
+#include <QAlphaCloud/QAlphaCloud>
 
 #include "testnetworkaccessmanager.h"
 
@@ -151,22 +151,18 @@ void LastPowerDataTest::testData()
 
 void LastPowerDataTest::testReloadEmpty()
 {
-
 }
 
 void LastPowerDataTest::testReloadError()
 {
-
 }
 
 void LastPowerDataTest::testReset()
 {
-
 }
 
 void LastPowerDataTest::testReloadInFlight()
 {
-
 }
 
 void LastPowerDataTest::testApiError()
