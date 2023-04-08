@@ -16,6 +16,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QScopeGuard>
 #include <QTimer>
 #include <QUrlQuery>
 
@@ -71,6 +72,10 @@ QJsonValue ApiRequest::data() const
 
 bool ApiRequest::send()
 {
+    auto cleanup = qScopeGuard([this] {
+        deleteLater();
+    });
+
     if (!m_connector->networkAccessManager()) {
         qCCritical(QALPHACLOUD_LOG) << "Cannot send request without QNetworkAccessManager";
         return false;
@@ -200,6 +205,8 @@ bool ApiRequest::send()
     connect(reply, &QNetworkReply::finished, reply, &QNetworkReply::deleteLater);
 
     m_reply = reply;
+
+    cleanup.dismiss();
 
     return true;
 }
