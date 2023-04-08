@@ -96,9 +96,10 @@ This project is configured using `cmake` and is built with [Qt](https://www.qt.i
 
 ### API Keys
 
-The API access configuration should be placed in the file `~/.config/Broulik/QAlphaCloud.conf` (create directories as needed):
+The API access configuration should be placed in the configuration file `~/.config/qalphacloud.ini`:
 ```
 [Api]
+ApiUrl=https://... # optional
 AppId=alpha...
 AppSecret=...
 ```

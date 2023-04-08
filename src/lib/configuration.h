@@ -95,6 +95,17 @@ public:
      */
     static Configuration *defaultConfiguration(QObject *parent = nullptr);
 
+    /**
+     * @brief The default configuration path.
+     *
+     * This is is "qalphacloud.ini" within the user's configuration directory.
+     *
+     * @note This does not check if this file exists.
+     *
+     * @return The path to the default configuration file.
+     */
+    static QString defaultConfigurationPath();
+
     Q_REQUIRED_RESULT QUrl apiUrl() const;
     void setApiUrl(const QUrl &apiUrl);
     /**

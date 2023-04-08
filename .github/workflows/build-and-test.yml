@@ -47,6 +47,7 @@ jobs:
     - name: XDG Base Dirs
       run: |
         mkdir -p "$HOME/.qttest/cache"
+        mkdir -p "$HOME/.qttest/config"
 
     - name: Test
       env:
