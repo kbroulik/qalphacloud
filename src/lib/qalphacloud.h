@@ -72,6 +72,15 @@ enum class ErrorCode {
 Q_ENUM_NS(ErrorCode)
 
 /**
+ * @brief Human-readable error text
+ * @param code The error code
+ * @param details Details about the error, for example a QString with the JSON parser error message,
+ * or a QJsonValue whose type is printed when a different one was expected, etc.
+ * @return A human-readable error description
+ */
+QALPHACLOUD_EXPORT QString errorText(ErrorCode code, const QVariant &details = QVariant());
+
+/**
  * @brief System status
  *
  * Corresponds to the @c emsStatus field on the @c /getEssList endpoint.

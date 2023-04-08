@@ -206,6 +206,7 @@ void OneDateEnergyTest::testGarbledJson()
 
     QTRY_COMPARE(energy.status(), QAlphaCloud::RequestStatus::Error);
     QCOMPARE(energy.error(), QAlphaCloud::ErrorCode::JsonParseError);
+    QVERIFY(!energy.errorString().isEmpty());
     QVERIFY(!energy.valid());
 }
 

@@ -197,6 +197,7 @@ void LastPowerDataTest::testGarbledJson()
 
     QTRY_COMPARE(data.status(), QAlphaCloud::RequestStatus::Error);
     QCOMPARE(data.error(), QAlphaCloud::ErrorCode::JsonParseError);
+    QVERIFY(!data.errorString().isEmpty());
     QVERIFY(!data.valid());
 }
 
