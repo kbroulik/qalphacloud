@@ -11,10 +11,14 @@
 #include "qalphacloud_log.h"
 #include "utils_p.h"
 
+#include <QFile>
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QJsonObject>
 #include <QMetaEnum>
 #include <QPointer>
+#include <QSettings>
+#include <QStandardPaths>
 #include <QVector>
 
 #include <algorithm>
@@ -97,15 +101,23 @@ public:
     {
     }
 
+    // TODO If we end up caching more, move all of this into a shared location.
+    static QString cachePath();
+
     void setStatus(RequestStatus status);
     void setError(ErrorCode error);
     void setErrorString(const QString &errorString);
 
     void processApiResult(const QJsonArray &jsonArray);
 
+    bool loadFromCache();
+    bool writeToCache(const QJsonArray &jsonArray);
+
     StorageSystemsModel *const q;
 
     Connector *m_connector = nullptr;
+    bool m_cached = true;
+
     RequestStatus m_status = RequestStatus::NoRequest;
     ErrorCode m_error = ErrorCode::NoError;
     QString m_errorString;
@@ -114,6 +126,11 @@ public:
 
     QVector<StorageSystem> m_data;
 };
+
+QString StorageSystemsModelPrivate::cachePath()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + QLatin1String("/qalphacloud_storagesystems.json");
+}
 
 void StorageSystemsModelPrivate::setStatus(RequestStatus status)
 {
@@ -141,9 +158,30 @@ void StorageSystemsModelPrivate::setErrorString(const QString &errorString)
 
 void StorageSystemsModelPrivate::processApiResult(const QJsonArray &jsonArray)
 {
+    bool dirty = false;
+
+    // Check whether the data actually changed.
+    // TODO proper delta update of the model.
+    if (m_data.count() != jsonArray.count()) {
+        dirty = true;
+    } else {
+        for (int i = 0; i < jsonArray.count(); ++i) {
+            const QJsonObject newJson = jsonArray.at(i).toObject();
+            const QJsonObject oldJson = m_data.at(i).json;
+
+            if (newJson != oldJson) {
+                dirty = true;
+                break;
+            }
+        }
+    }
+
+    if (!dirty) {
+        return;
+    }
+
     const QString oldPrimarySerialNumber = q->primarySerialNumber();
 
-    // TODO delta update
     q->beginResetModel();
 
     m_data.clear();
@@ -163,6 +201,50 @@ void StorageSystemsModelPrivate::processApiResult(const QJsonArray &jsonArray)
     setStatus(QAlphaCloud::RequestStatus::Finished);
 }
 
+bool StorageSystemsModelPrivate::loadFromCache()
+{
+    const QString path = cachePath();
+
+    QFile cacheFile(path);
+    if (!cacheFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        // Not a warning, cache may just not exist.
+        qCDebug(QALPHACLOUD_LOG) << "Failed to open StorageSystemsModel cache" << path << "for reading" << cacheFile.errorString();
+        return false;
+    }
+
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(cacheFile.readAll(), &error);
+    if (error.error != QJsonParseError::NoError) {
+        qCWarning(QALPHACLOUD_LOG) << "Failed to parse StorageSystemsModel cache" << error.errorString();
+        return false;
+    }
+
+    processApiResult(doc.array());
+    qCDebug(QALPHACLOUD_LOG) << "Loaded StorageSystemsModel cache from" << path;
+    return true;
+}
+
+bool StorageSystemsModelPrivate::writeToCache(const QJsonArray &jsonArray)
+{
+    const QString path = cachePath();
+
+    // Probably don't bother with QSaveFile.
+    QFile cacheFile(path);
+    if (!cacheFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qCWarning(QALPHACLOUD_LOG) << "Failed to open StorageSystemsModel cache" << path << "for writing" << cacheFile.errorString();
+        return false;
+    }
+
+    const QByteArray data = QJsonDocument(jsonArray).toJson(QJsonDocument::Compact);
+    if (cacheFile.write(data) != data.size()) {
+        qCWarning(QALPHACLOUD_LOG) << "Failed to write StorageSystemsModel cache data";
+        return false;
+    }
+
+    qCDebug(QALPHACLOUD_LOG) << "Cached StorageSystemsModel to " << path;
+    return true;
+}
+
 StorageSystemsModel::StorageSystemsModel(QObject *parent)
     : StorageSystemsModel(nullptr, parent)
 {
@@ -177,6 +259,16 @@ StorageSystemsModel::StorageSystemsModel(Connector *connector, QObject *parent)
     connect(this, &StorageSystemsModel::rowsInserted, this, &StorageSystemsModel::countChanged);
     connect(this, &StorageSystemsModel::rowsRemoved, this, &StorageSystemsModel::countChanged);
     connect(this, &StorageSystemsModel::modelReset, this, &StorageSystemsModel::countChanged);
+
+    // Give the creator a chance to disable caching.
+    QMetaObject::invokeMethod(
+        this,
+        [this] {
+            if (d->m_cached) {
+                d->loadFromCache();
+            }
+        },
+        Qt::QueuedConnection);
 }
 
 StorageSystemsModel::~StorageSystemsModel() = default;
@@ -195,6 +287,21 @@ void StorageSystemsModel::setConnector(Connector *connector)
     d->m_connector = connector;
     // Additional setup goes here, if any.
     Q_EMIT connectorChanged(connector);
+}
+
+bool StorageSystemsModel::cached() const
+{
+    return d->m_cached;
+}
+
+void StorageSystemsModel::setCached(bool cached)
+{
+    if (d->m_cached == cached) {
+        return;
+    }
+
+    d->m_cached = cached;
+    Q_EMIT cachedChanged(cached);
 }
 
 RequestStatus StorageSystemsModel::status() const
@@ -297,7 +404,13 @@ bool StorageSystemsModel::reload()
     });
 
     connect(request, &ApiRequest::result, this, [this, request] {
-        d->processApiResult(request->data().toArray());
+        const QJsonArray jsonArray = request->data().toArray();
+
+        d->processApiResult(jsonArray);
+
+        if (d->m_cached) {
+            d->writeToCache(jsonArray);
+        }
     });
 
     const bool ok = request->send();

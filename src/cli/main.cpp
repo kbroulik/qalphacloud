@@ -88,6 +88,7 @@ void printQObject(QObject *item)
 void listStorageSystems(QAlphaCloud::Connector *connector)
 {
     auto *storages = new StorageSystemsModel(connector);
+    storages->setCached(false);
 
     QObject::connect(storages, &StorageSystemsModel::statusChanged, [storages](QAlphaCloud::RequestStatus status) {
         if (status == QAlphaCloud::RequestStatus::Error) {
@@ -248,6 +249,7 @@ QString getPrimarySerial(Connector *connector)
 {
     cerr << "Fetching primary serial number..." << endl;
     StorageSystemsModel storages(connector, nullptr);
+    storages.setCached(false);
 
     QEventLoop loop;
     QObject::connect(&storages, &StorageSystemsModel::statusChanged, [&loop](QAlphaCloud::RequestStatus status) {
