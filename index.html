@@ -62,11 +62,251 @@ $(function() {
 </iframe>
 </div>
 
-<div class="header">
+<div class="PageDoc"><div class="header">
   <div class="headertitle">
 <div class="title">QAlphaCloud Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><p><a class="anchor" id="md_README"></a></p>
+<h1><a class="anchor" id="autotoc_md0"></a>
+:sun_with_face: QAlphaCloud</h1>
+<p><a href="https://github.com/kbroulik/qalphacloud/actions/workflows/build-and-test.yml?query=branch%3Amaster"><img src="https://github.com/kbroulik/qalphacloud/actions/workflows/build-and-test.yml/badge.svg?branch=master" alt="Build Status" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/kbroulik/qalphacloud/actions/workflows/reuse.yml?query=branch%3Amaster"><img src="https://github.com/kbroulik/qalphacloud/actions/workflows/reuse.yml/badge.svg?branch=master" alt="REUSE compliance" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/kbroulik/qalphacloud/actions/workflows/doxygen.yml?query=branch%3Amaster"><img src="https://github.com/kbroulik/qalphacloud/actions/workflows/doxygen.yml/badge.svg?branch=master" alt="Doxygen status" style="pointer-events: none;" class="inline"/></a></p>
+<p><em>Qt bindings for the <a href="https://github.com/alphaess-developer/alphacloud_open_api">AlphaCloud API</a> by Alpha ESS Co., Ltd.</em></p>
+<h2><a class="anchor" id="autotoc_md1"></a>
+Table of Contents</h2>
+<ul>
+<li><a href="#features">Features</a><ul>
+<li><a href="#libqalphacloud">libqalphacloud</a></li>
+<li><a href="#ksystemstats-plug-in">KSystemStats plug-in</a></li>
+<li><a href="#kinfocenter-module">KInfoCenter Module</a></li>
+<li><a href="#command-line-interface">Command Line Interface</a></li>
+</ul>
+</li>
+<li><a href="#nerd_face-why">Why?</a></li>
+<li><a href="#hammer-getting-started">Getting Started</a><ul>
+<li><a href="#api-keys">API Keys</a></li>
+<li><a href="#build">Build</a></li>
+<li><a href="#configure-options">Configure Options</a></li>
+<li><a href="#logging-categories">Logging Categories</a></li>
+<li><a href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li><a href="#electric_plug-api">API</a><ul>
+<li><a href="#classes">Classes</a></li>
+<li><a href="#examples">Examples</a></li>
+</ul>
+</li>
+<li><a href="#building_construction-to-do">To Do</a></li>
+<li><a href="#paperclips-licensing">Licensing</a></li>
+</ul>
+<h2><a class="anchor" id="autotoc_md2"></a>
+Features</h2>
+<h3><a class="anchor" id="autotoc_md3"></a>
+libqalphacloud</h3>
+<p>A Qt library around the AlphaCloud API. It provides both C++ and QML APIs for fetching data.</p>
+<h3><a class="anchor" id="autotoc_md4"></a>
+KSystemStats plug-in</h3>
+<p>A plug-in for feeding data into <a href="https://apps.kde.org/plasma-systemmonitor/">KDE’s System Monitor</a>.</p>
+<p>It enables you to create both complex monitor pages for all aspects of your solar and energy storage installation as well as add relevant meters right to your desktop.</p>
+<p><img src="artwork/Screenshot_systemmonitor.png?raw=true" alt="Screenshot of Plasma System Monitor showing various line charts with live photovoltaic information" title="Plasma System Monitor plug-in" class="inline"/> <em>How cool is that? You can have both CPU load and photovoltaic energy production on the same page!</em></p>
+<h3><a class="anchor" id="autotoc_md5"></a>
+KInfoCenter module</h3>
+<p>A module for displaying historic energy production and consumption data in KInfoCenter.</p>
+<p><img src="artwork/Screenshot_infocenter.png?raw=true" alt="Screenshot of KInfoCenter module showing historic energy production data and live solar information" title="KInfoCenter module" class="inline"/> <em>KInfoCenter module showing both live and historic photovoltaic information</em></p>
+<h3><a class="anchor" id="autotoc_md6"></a>
+Command-Line Interface</h3>
+<p>The library comes with a command-line interface (CLI) for easily querying data and forwarding it to your own scripts and helpers in either human-readable or JSON formats.</p>
+<div class="fragment"><div class="line">$ qalphacloud essList</div>
+<div class="line">QAlphaCloud CLI</div>
+<div class="line">  API URL: https://openapi.alphaess.com/api/</div>
+<div class="line"> </div>
+<div class="line">List storage systems:</div>
+<div class="line">1 storage system(s) found:</div>
+<div class="line"> </div>
+<div class="line">SerialNumber: ABCDEF</div>
+<div class="line">Status: Normal</div>
+<div class="line">InverterModel: INV</div>
+<div class="line">InverterPower: 10000</div>
+<div class="line">BatteryModel: BAT</div>
+<div class="line">BatteryGrossCapacity: 5000</div>
+<div class="line">BatteryRemainingCapacity: 4750</div>
+<div class="line">BatteryUsableCapacity: 95</div>
+<div class="line">PhotovoltaicPower: 10000</div>
+</div><!-- fragment --><p>The <code>--help</code> command describes all supported arguments and endpoints.</p>
+<h2><a class="anchor" id="autotoc_md7"></a>
+:nerd_face: Why?</h2>
+<p>When I learned that there is an API for my solar installation, I immediately wanted to write a widget for the <a href="https://kde.org/plasma-desktop/">KDE Plasma Desktop</a> so I could see live data anytime on my panel.</p>
+<p>Over the course of just a few evenings I ended up creating a proper shared library that makes use of all the current best practices (automated tests and code coverage checks, full <a href="https://reuse.software/">REUSE-compliance</a>, documentation, API/ABI-compatibility guarantees, C++ <em>and</em> QML bindings, etc.) to show off how simple it is for a 3rd party product to make use of KDE’s libraries and how versatile they are.</p>
+<p>KDE’s <a href="https://api.kde.org/frameworks/extra-cmake-modules/html/index.html">Extra CMake Modules</a> make creating libraries with CMake a lot nicer and their powerful yet easy-to-use <a href="https://api.kde.org/frameworks/kquickcharts/html/index.html">KQuickCharts</a> Framework produces beautiful and fully hardware-accelerated diagrams. The <em>KSystemStats</em> daemon is then used to feed data into <a href="https://apps.kde.org/plasma-systemmonitor/">System Monitor</a> which offers both a fully customizable UI as well as simple desktop and panel widgets.</p>
+<p><img src="artwork/Screenshot_kdednotifier.png?raw=true" alt="Screenshot of a Plasma Notification popup: “First Ray of Sun: The first 500 Wh of solar energy have been produced today.”" title="Plasma Notification about the first way of sun" class="inline"/> <em>Plasma notifying about the first ray of sun. Go start the dishwasher! (Not included in this repository yet)</em></p>
+<p>While I am aware that the number of people who operate this particular system <em>and</em> are interested in C++/Qt development is miniscule, it’s still a useful project for me personally and is a good exercise in system integration. More importantly, though, this should serve as an inspiration for the <a href="https://eco.kde.org/">KDE Eco initiative</a>, for example to build an infrastructure to do system maintenance tasks such as installing updates only when the sun is shining.</p>
+<h2><a class="anchor" id="autotoc_md8"></a>
+:hammer: Getting Started</h2>
+<p>This project is configured using <code>cmake</code> and is built with <a href="https://www.qt.io/">Qt</a>. It also uses some of KDE’s fantastic <a href="https://develop.kde.org/products/frameworks/">Frameworks</a>.</p>
+<h3><a class="anchor" id="autotoc_md9"></a>
+API Keys</h3>
+<p>The API access configuration should be placed in the configuration file <code>~/.config/qalphacloud.ini</code>: </p><div class="fragment"><div class="line">[Api]</div>
+<div class="line">ApiUrl=https://... # optional</div>
+<div class="line">AppId=alpha...</div>
+<div class="line">AppSecret=...</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md10"></a>
+Build</h3>
+<p>Configure and run the build through <code>cmake</code>, for example: </p><div class="fragment"><div class="line">mkdir build</div>
+<div class="line">cd build</div>
+<div class="line">cmake .. -DCMAKE_INSTALL_PREFIX=&lt;prefix&gt;</div>
+<div class="line">cmake --build .</div>
+<div class="line">cmake --install .</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md11"></a>
+Configure Options</h3>
+<p>By default, all features and dependencies (except example code) are enabled. You can disable any feature by passing the relevant <code>-DBUILD_...=OFF</code> switch to the <code>cmake</code> command:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Option   </th><th class="markdownTableHeadNone">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>BUILD_QML</b>   </td><td class="markdownTableBodyNone"><b>ON</b>   </td><td class="markdownTableBodyNone">Build QML bindings    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>BUILD_KSYSTEMSTATS</b>   </td><td class="markdownTableBodyNone"><b>ON</b>   </td><td class="markdownTableBodyNone">Build KSystemStats plug-in    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>BUILD_KINFOCENTER</b>   </td><td class="markdownTableBodyNone"><b>ON</b>   </td><td class="markdownTableBodyNone">Build KInfoCenter module    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>BUILD_TESTING</b>   </td><td class="markdownTableBodyNone"><b>ON</b>   </td><td class="markdownTableBodyNone">Build unit tests    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>BUILD_COVERAGE</b>   </td><td class="markdownTableBodyNone"><b>OFF</b>   </td><td class="markdownTableBodyNone">Build with test coverage (<em>gcov</em>) enabled    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>BUILD_EXAMPLES</b>   </td><td class="markdownTableBodyNone"><b>OFF</b>   </td><td class="markdownTableBodyNone">Build examples in the <a href="examples/">examples</a> directory    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>API_URL</b>   </td><td class="markdownTableBodyNone"><a href="https://openapi.alphaess.com/api/">https://openapi.alphaess.com/api/</a>   </td><td class="markdownTableBodyNone">API URL to use, defaults to the official endpoint   </td></tr>
+</table>
+<h3><a class="anchor" id="autotoc_md12"></a>
+Logging Categories</h3>
+<p>The library makes use of <a href="https://doc.qt.io/qt-5/qloggingcategory.html#configuring-categories">Categorized Logging</a> under the <b>qalphacloud</b> identifier.</p>
+<p>You can enable all debug output by running an application with: </p><div class="fragment"><div class="line">QT_LOGGING_RULES=&#39;qalphacloud*=true&#39;</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md13"></a>
+Dependencies</h3>
+<p>This project needs Qt 5.15 and KDE Frameworks 5.80 (most notably <a href="https://api.kde.org/frameworks/extra-cmake-modules/html/index.html">ECM</a>) or newer. It is possible to build just the library without the GUI components.</p>
+<h4><a class="anchor" id="autotoc_md14"></a>
+TL;DR</h4>
+<p>On Ubuntu 22.04 run: </p><div class="fragment"><div class="line"># apt install build-essential cmake qtbase5-dev qtdeclarative5-dev qtquickcontrols2-5-dev extra-cmake-modules libkf5coreaddons-dev libkf5declarative-dev libkf5sysguard-dev libsensors-dev qml-module-org-kde-kirigami2 qml-module-org-kde-quickcharts</div>
+</div><!-- fragment --><p>The following development files are required (as well as their respective indirect dependencies):</p>
+<h4><a class="anchor" id="autotoc_md15"></a>
+libqalphacloud</h4>
+<ul>
+<li>Qt Core and Qt Network</li>
+<li>Qt QML / Declarative (<em>optional</em>, for QML bindings)</li>
+<li>Qt Widgets (<em>optional</em>, for example code)</li>
+</ul>
+<h4><a class="anchor" id="autotoc_md16"></a>
+systemstats</h4>
+<ul>
+<li>KCoreAddons (from KDE Frameworks)</li>
+<li>KSysGuard (from KDE Plasma)</li>
+<li>libsensors</li>
+</ul>
+<h4><a class="anchor" id="autotoc_md17"></a>
+infocenter</h4>
+<ul>
+<li>KCoreAddons (from KDE Frameworks</li>
+<li>KDeclarative (from KDE Frameworks)</li>
+<li>KSysGuard (from KDE Plasma)</li>
+<li>libsensors</li>
+<li>QML module for Kirigami</li>
+<li>QML module for KQuickCharts</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md18"></a>
+:electric_plug: API</h2>
+<p>You can find an extensive Doxygen documentation on <a href="https://kbroulik.github.io/qalphacloud">GitHub Pages</a>.</p>
+<p>The project aims to provide ABI and API stability, however it cannot be guaranteed at this early stage of development.</p>
+<h3><a class="anchor" id="autotoc_md19"></a>
+Classes</h3>
+<p>All classes are found in the <code><a class="el" href="namespaceQAlphaCloud.html" title="Utility namespace.">QAlphaCloud</a></code> C++ namespace and the <code>de.broulik.qalphacloud</code> QML import.</p>
+<h4><a class="anchor" id="autotoc_md20"></a>
+QAlphaCloud *(namespace)*</h4>
+<p>Namespace with <code>RequestStatus</code>, <code>SystemStatus</code> and <code>ErrorCode</code> enums.</p>
+<h4><a class="anchor" id="autotoc_md21"></a>
+Configuration</h4>
+<p>Represents the configuration of an API consumer, i.e. the endpoint URL, App ID, and secret registered with the API.</p>
+<p>This can either be programmatically set or read from the <a href="#api-keys">Configuration file</a> mentioned above.</p>
+<h4><a class="anchor" id="autotoc_md22"></a>
+Connector</h4>
+<p>Represents a connection to the API with a given <em>Configuration</em>. This needs to be created in order to use any of the classes below.</p>
+<h4><a class="anchor" id="autotoc_md23"></a>
+StorageSystemsModel</h4>
+<p>Endpoint: <code>/getEssList</code></p>
+<p>Fetches the list of registered storage systems from the given <em>Connector</em> and provides them as a <code>QAbstractListModel</code>.</p>
+<p>For convenience, the first (and typically only) serial number is offered in the <code>primarySerialNumber</code> property.</p>
+<h4><a class="anchor" id="autotoc_md24"></a>
+LastPowerData</h4>
+<p>Endpoint: <code>/getLastPowerData</code></p>
+<p>Fetches live data, such as current photovoltaic energy, battery state of charge, etc from the given <em>Connector</em> and serial number.</p>
+<h4><a class="anchor" id="autotoc_md25"></a>
+OneDateEnergy</h4>
+<p>Endpoint: <code>/getOneDateEnergy</code></p>
+<p>Fetches cumulative data energy information, such as amount of energy produced in a day, from the given <em>Connector</em>, serial number, and date.</p>
+<h4><a class="anchor" id="autotoc_md26"></a>
+OneDayPowerModel</h4>
+<p>Endpoint: <code>/getOneDayPower</code></p>
+<p>Fetches historic power data, such as a trend of photovoltaic production over a day, from the given <em>Connector</em>, serial number, and date, and provides them as a <code>QAbstractListModel</code>.</p>
+<h3><a class="anchor" id="autotoc_md27"></a>
+Examples</h3>
+<p>You can find examples for both C++ and QML in the <a href="examples/">examples</a> directory.</p>
+<h2><a class="anchor" id="autotoc_md28"></a>
+:building_construction: To Do</h2>
+<ul>
+<li>The project should be prepared for a Qt 6 build, however this has not been attempted, specifically as KDE Frameworks 6 is still in development.</li>
+<li>Running clang-tidy, clazy, and friends on CI</li>
+<li>None of the EV-related readouts are implemented.</li>
+<li>None of the charging configuration settings (<code>getChargeConfigInfo</code>, <code>updateChargeConfigInfo</code>, <code>getDisChargeConfigInfo</code>, <code>updateDisChargeConfigInfo</code>) can be read or altered.</li>
+<li>Localization. All user-visible strings are marked for translation with <code>tr</code> or <code>qsTr</code> but the infrastructure for extracting and importing them has not been set up.</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md29"></a>
+:paperclips: Licensing</h2>
+<p>This project is fully <a href="https://reuse.software/">REUSE-3.0-compliant</a>.</p>
+<h3><a class="anchor" id="autotoc_md30"></a>
+libqalphacloud</h3>
+<div class="fragment"><div class="line">Copyright (C) 2023 Kai Uwe Broulik &lt;ghqalpha@broulik.de&gt;</div>
+<div class="line"> </div>
+<div class="line">This library is free software; you can redistribute it and/or modify it under</div>
+<div class="line">the terms of the GNU Lesser General Public License as published by the Free</div>
+<div class="line">Software Foundation; either version 2.1 of the License, or (at your option)</div>
+<div class="line">any later version.</div>
+<div class="line"> </div>
+<div class="line">This library is distributed in the hope that it will be useful, but WITHOUT</div>
+<div class="line">ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS</div>
+<div class="line">FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more</div>
+<div class="line">details.</div>
+<div class="line"> </div>
+<div class="line">You should have received a copy of the GNU Lesser General Public License along</div>
+<div class="line">with this library; if not, write to the Free Software Foundation, Inc., 51</div>
+<div class="line">Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md31"></a>
+systemstats and infocenter</h3>
+<div class="fragment"><div class="line">Copyright (C) 2023 Kai Uwe Broulik &lt;ghqalpha@broulik.de&gt;</div>
+<div class="line"> </div>
+<div class="line">This program is free software; you can redistribute it and/or modify it under</div>
+<div class="line">the terms of the GNU General Public License as published by the Free Software</div>
+<div class="line">Foundation; either version 2 of the License, or (at your option) any later</div>
+<div class="line">version.</div>
+<div class="line"> </div>
+<div class="line">This program is distributed in the hope that it will be useful, but WITHOUT</div>
+<div class="line">ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS</div>
+<div class="line">FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</div>
+<div class="line"> </div>
+<div class="line">You should have received a copy of the GNU General Public License along with</div>
+<div class="line">this program; if not, write to the Free Software Foundation, Inc., 51 Franklin</div>
+<div class="line">Street, Fifth Floor, Boston, MA 02110-1301, USA.</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md32"></a>
+Example code and build system configuration</h3>
+<div class="fragment"><div class="line">Copyright (C) 2023 Kai Uwe Broulik &lt;ghqalpha@broulik.de&gt; All rights reserved.</div>
+<div class="line"> </div>
+<div class="line">Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</div>
+<div class="line"> </div>
+<div class="line">1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</div>
+<div class="line"> </div>
+<div class="line">2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</div>
+<div class="line"> </div>
+<div class="line">THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</div>
+</div><!-- fragment --><p><em>This project is not affiliated, associated, authorized, endorsed by, or in any way officially connected with Alpha ESS Co., Ltd., or any of its subsidiaries or its affiliates. The official Alpha ESS Monitoring dashboard can be found at <a href="https://cloud.alphaess.com/">https://cloud.alpha.ess.com</a>.</em> </p>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
