@@ -65,7 +65,8 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">QAlphaCloud Namespace Reference</div>  </div>
 </div><!--header-->
@@ -135,6 +136,12 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a5792c15f38314d228b48100bfc51710d"><td class="mdescLeft">&#160;</td><td class="mdescRight">System status.  <a href="namespaceQAlphaCloud.html#a5792c15f38314d228b48100bfc51710d">More...</a><br /></td></tr>
 <tr class="separator:a5792c15f38314d228b48100bfc51710d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a3e3ef3f8c3d70a0e481ee3e830bd50f2"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceQAlphaCloud.html#a3e3ef3f8c3d70a0e481ee3e830bd50f2">errorText</a> (<a class="el" href="namespaceQAlphaCloud.html#ad03a9b8e9aee0d525d6da08956078539">ErrorCode</a> code, const QVariant &amp;details=QVariant())</td></tr>
+<tr class="memdesc:a3e3ef3f8c3d70a0e481ee3e830bd50f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Human-readable error text.  <a href="namespaceQAlphaCloud.html#a3e3ef3f8c3d70a0e481ee3e830bd50f2">More...</a><br /></td></tr>
+<tr class="separator:a3e3ef3f8c3d70a0e481ee3e830bd50f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Utility namespace. </p>
@@ -266,6 +273,45 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="a5792c15f38314d228b48100bfc51710da960b44c579bc2f6818d2daaf9e4c16f0"></a>Normal&#160;</td><td class="fielddoc"><p>The system is performing normally. </p>
 </td></tr>
 </table>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a3e3ef3f8c3d70a0e481ee3e830bd50f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e3ef3f8c3d70a0e481ee3e830bd50f2">&#9670;&nbsp;</a></span>errorText()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QALPHACLOUD_EXPORT QString QAlphaCloud::errorText </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceQAlphaCloud.html#ad03a9b8e9aee0d525d6da08956078539">ErrorCode</a>&#160;</td>
+          <td class="paramname"><em>code</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QVariant &amp;&#160;</td>
+          <td class="paramname"><em>details</em> = <code>QVariant()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Human-readable error text. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">code</td><td>The error code </td></tr>
+    <tr><td class="paramname">details</td><td>Details about the error, for example a QString with the JSON parser error message, or a QJsonValue whose type is printed when a different one was expected, etc. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A human-readable error description </dd></dl>
 
 </div>
 </div>
