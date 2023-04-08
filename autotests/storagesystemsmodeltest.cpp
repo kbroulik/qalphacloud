@@ -25,6 +25,8 @@ class StorageSystemsModelTest : public QObject
 
 private Q_SLOTS:
     void initTestCase();
+    void cleanupTestCase();
+
     void testInitialState();
     void testRoleNames();
 
@@ -53,6 +55,12 @@ void StorageSystemsModelTest::initTestCase()
     m_connector.setConfiguration(configuration);
 
     m_connector.setNetworkAccessManager(&m_networkAccessManager);
+}
+
+void StorageSystemsModelTest::cleanupTestCase()
+{
+    const QString cachePath = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + QLatin1String("/qalphacloud_storagesystems.json");
+    QFile::remove(cachePath);
 }
 
 void StorageSystemsModelTest::testInitialState()
