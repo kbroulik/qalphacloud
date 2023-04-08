@@ -8,6 +8,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QSignalSpy>
+#include <QStandardPaths>
 #include <QTest>
 
 #include <QAlphaCloud/QAlphaCloud>
@@ -30,6 +31,7 @@ private Q_SLOTS:
     void testSingleData();
     void testMultipleData();
     void testReload();
+    void testCache();
 
     void testApiError();
     void testGarbledJson();
@@ -42,6 +44,8 @@ private:
 
 void StorageSystemsModelTest::initTestCase()
 {
+    QStandardPaths::setTestModeEnabled(true);
+
     // Don't rely on defaultConfiguration in tests!
     auto *configuration = new Configuration(&m_connector);
     configuration->setAppId(QStringLiteral("storageSystemsModelApp"));
@@ -55,6 +59,7 @@ void StorageSystemsModelTest::testInitialState()
 {
     {
         StorageSystemsModel model;
+        model.setCached(false);
         QCOMPARE(model.status(), RequestStatus::NoRequest);
         QCOMPARE(model.rowCount(), 0);
         QVERIFY(model.primarySerialNumber().isEmpty());
@@ -72,6 +77,7 @@ void StorageSystemsModelTest::testInitialState()
 
     {
         StorageSystemsModel model(&m_connector);
+        model.setCached(false);
         QCOMPARE(model.connector(), &m_connector);
 
         QCOMPARE(model.status(), RequestStatus::NoRequest);
@@ -85,6 +91,7 @@ void StorageSystemsModelTest::testInitialState()
 void StorageSystemsModelTest::testRoleNames()
 {
     StorageSystemsModel model;
+    model.setCached(false);
 
     QList<QByteArray> expectedRoleNames{
         QByteArrayLiteral("serialNumber"),
@@ -109,6 +116,7 @@ void StorageSystemsModelTest::testRoleNames()
 void StorageSystemsModelTest::testSingleData()
 {
     StorageSystemsModel model(&m_connector);
+    model.setCached(false);
 
     const QString testDataPath = QFINDTESTDATA("data/storagesystems_single.json");
 
@@ -177,6 +185,7 @@ void StorageSystemsModelTest::testSingleData()
 void StorageSystemsModelTest::testMultipleData()
 {
     StorageSystemsModel model(&m_connector);
+    model.setCached(false);
 
     const QString testDataPath = QFINDTESTDATA("data/storagesystems_multiple.json");
 
@@ -238,6 +247,7 @@ void StorageSystemsModelTest::testMultipleData()
 void StorageSystemsModelTest::testReload()
 {
     StorageSystemsModel model(&m_connector);
+    model.setCached(false);
 
     const QString testDataSinglePath = QFINDTESTDATA("data/storagesystems_single.json");
     const QString testDataMultiplePath = QFINDTESTDATA("data/storagesystems_multiple.json");
@@ -289,9 +299,51 @@ void StorageSystemsModelTest::testReload()
     }
 }
 
+void StorageSystemsModelTest::testCache()
+{
+    using Roles = StorageSystemsModel::Roles;
+
+    {
+        StorageSystemsModel model(&m_connector);
+        model.setCached(true);
+
+        const QString testDataPath = QFINDTESTDATA("data/storagesystems_multiple.json");
+
+        m_networkAccessManager.setOverrideUrl(QUrl::fromLocalFile(testDataPath));
+
+        // Load test data.
+        QVERIFY(model.reload());
+
+        QCOMPARE(model.status(), QAlphaCloud::RequestStatus::Loading);
+
+        QTRY_COMPARE(model.status(), QAlphaCloud::RequestStatus::Finished);
+
+        // We already verified that the data stuff works in the tests before, so just check one role here.
+        const QModelIndex idx = model.index(0);
+        const QString serialNumber = idx.data(static_cast<int>(Roles::SerialNumber)).toString();
+        QCOMPARE(serialNumber, QStringLiteral("SERIALA"));
+    }
+
+    {
+        // Now create a new instance which should get the data we just cached.
+        StorageSystemsModel model(&m_connector);
+        model.setCached(true);
+
+        // Don't call reload, the data should be there magically.
+        QCOMPARE(model.status(), QAlphaCloud::RequestStatus::NoRequest);
+        // Data is loaded deferred.
+        QTRY_COMPARE(model.rowCount(), 3);
+
+        const QModelIndex idx = model.index(0);
+        const QString serialNumber = idx.data(static_cast<int>(Roles::SerialNumber)).toString();
+        QCOMPARE(serialNumber, QStringLiteral("SERIALA"));
+    }
+}
+
 void StorageSystemsModelTest::testApiError()
 {
     StorageSystemsModel model(&m_connector);
+    model.setCached(false);
 
     const QString testDataPath = QFINDTESTDATA("data/api_error.json");
 
@@ -314,6 +366,7 @@ void StorageSystemsModelTest::testApiError()
 void StorageSystemsModelTest::testGarbledJson()
 {
     StorageSystemsModel model(&m_connector);
+    model.setCached(false);
 
     const QString testDataPath = QFINDTESTDATA("data/garbled.json");
 
@@ -336,6 +389,7 @@ void StorageSystemsModelTest::testGarbledJson()
 void StorageSystemsModelTest::testReloadError()
 {
     StorageSystemsModel model(&m_connector);
+    model.setCached(false);
 
     const QString testDataGoodPath = QFINDTESTDATA("data/storagesystems_single.json");
     const QString testDataBadPath = QFINDTESTDATA("data/garbled.json");

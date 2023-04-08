@@ -44,6 +44,10 @@ jobs:
       run: |
         MAKEFLAGS=-j$(nproc) cmake --build ${BUILD_DIR}
 
+    - name: XDG Base Dirs
+      run: |
+        mkdir -p "$HOME/.qttest/cache"
+
     - name: Test
       env:
         CC: ${{matrix.config.CC}}

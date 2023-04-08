@@ -36,6 +36,15 @@ class QALPHACLOUD_EXPORT StorageSystemsModel : public QAbstractListModel
     Q_PROPERTY(QAlphaCloud::Connector *connector READ connector WRITE setConnector NOTIFY connectorChanged REQUIRED)
 
     /**
+     * @brief Cache the data on disk
+     *
+     * Whether to cache the storage systems data on disk
+     * since it is unlikely to change often.
+     * Default is true.
+     */
+    Q_PROPERTY(bool cached READ cached WRITE setCached NOTIFY cachedChanged)
+
+    /**
      * @brief The number of items in the model
      */
     Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
@@ -51,6 +60,9 @@ class QALPHACLOUD_EXPORT StorageSystemsModel : public QAbstractListModel
 
     /**
      * @brief The current request status
+     *
+     * The model may contain cached data before a request is sent
+     * and even if status is NoRequest.
      */
     Q_PROPERTY(QAlphaCloud::RequestStatus status READ status NOTIFY statusChanged)
 
@@ -105,6 +117,10 @@ public:
     Q_REQUIRED_RESULT QAlphaCloud::Connector *connector() const;
     void setConnector(QAlphaCloud::Connector *connector);
     Q_SIGNAL void connectorChanged(QAlphaCloud::Connector *connector);
+
+    Q_REQUIRED_RESULT bool cached() const;
+    void setCached(bool cached);
+    Q_SIGNAL void cachedChanged(bool cached);
 
     QAlphaCloud::RequestStatus status() const;
     Q_SIGNAL void statusChanged(QAlphaCloud::RequestStatus status);
