@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['serialnumber_70',['serialNumber',['../classQAlphaCloud_1_1LastPowerData.html#acf6fd8e02213ecf1de2fc370d40c8102',1,'QAlphaCloud::LastPowerData::serialNumber()'],['../classQAlphaCloud_1_1OneDateEnergy.html#adbbbfeb1178bb22c8edef0ecadf37dad',1,'QAlphaCloud::OneDateEnergy::serialNumber()'],['../classQAlphaCloud_1_1OneDayPowerModel.html#a6d7fb107237c3e76decfddb848eb0850',1,'QAlphaCloud::OneDayPowerModel::serialNumber()']]],
-  ['serialnumber_71',['SerialNumber',['../classQAlphaCloud_1_1StorageSystemsModel.html#a25a8efa77f3119ed400f8cff3bf42084aa54372ef430f726c8343fc5550fade42',1,'QAlphaCloud::StorageSystemsModel']]],
+  ['serialnumber_70',['SerialNumber',['../classQAlphaCloud_1_1StorageSystemsModel.html#a25a8efa77f3119ed400f8cff3bf42084aa54372ef430f726c8343fc5550fade42',1,'QAlphaCloud::StorageSystemsModel']]],
+  ['serialnumber_71',['serialNumber',['../classQAlphaCloud_1_1LastPowerData.html#acf6fd8e02213ecf1de2fc370d40c8102',1,'QAlphaCloud::LastPowerData::serialNumber()'],['../classQAlphaCloud_1_1OneDateEnergy.html#adbbbfeb1178bb22c8edef0ecadf37dad',1,'QAlphaCloud::OneDateEnergy::serialNumber()'],['../classQAlphaCloud_1_1OneDayPowerModel.html#a6d7fb107237c3e76decfddb848eb0850',1,'QAlphaCloud::OneDayPowerModel::serialNumber()']]],
   ['setfailed_72',['SetFailed',['../namespaceQAlphaCloud.html#ad03a9b8e9aee0d525d6da08956078539af3ee40fc036e28eb721e70e63dcf2234',1,'QAlphaCloud']]],
   ['setnetworkaccessmanager_73',['setNetworkAccessManager',['../classQAlphaCloud_1_1Connector.html#a652511a37c07b3621045dc3ab59fcb2a',1,'QAlphaCloud::Connector']]],
   ['signempty_74',['SignEmpty',['../namespaceQAlphaCloud.html#ad03a9b8e9aee0d525d6da08956078539a296f415bb4069946fc327437af892bd4',1,'QAlphaCloud']]],
