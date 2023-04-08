@@ -11,9 +11,9 @@
 #include <QSignalSpy>
 #include <QTest>
 
-#include <QAlphaCloud/QAlphaCloud>
 #include <QAlphaCloud/Connector>
 #include <QAlphaCloud/OneDayPowerModel>
+#include <QAlphaCloud/QAlphaCloud>
 
 #include "testnetworkaccessmanager.h"
 

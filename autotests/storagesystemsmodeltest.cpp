@@ -11,8 +11,8 @@
 #include <QStandardPaths>
 #include <QTest>
 
-#include <QAlphaCloud/QAlphaCloud>
 #include <QAlphaCloud/Connector>
+#include <QAlphaCloud/QAlphaCloud>
 #include <QAlphaCloud/StorageSystemsModel>
 
 #include "testnetworkaccessmanager.h"
