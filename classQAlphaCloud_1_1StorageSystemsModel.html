@@ -135,6 +135,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setConnector</b> (<a 
 <tr class="memitem:ad45dc281ad8881c252fcacf12302948c"><td class="memItemLeft" align="right" valign="top"><a id="ad45dc281ad8881c252fcacf12302948c"></a>
 Q_SIGNAL void&#160;</td><td class="memItemRight" valign="bottom"><b>connectorChanged</b> (<a class="el" href="classQAlphaCloud_1_1Connector.html">QAlphaCloud::Connector</a> *<a class="el" href="classQAlphaCloud_1_1StorageSystemsModel.html#a4f1b93df00c79c9f054ab2dd3672f1b8">connector</a>)</td></tr>
 <tr class="separator:ad45dc281ad8881c252fcacf12302948c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a4993742aa177e968d8c146b656e7e3"><td class="memItemLeft" align="right" valign="top"><a id="a0a4993742aa177e968d8c146b656e7e3"></a>
+Q_REQUIRED_RESULT bool&#160;</td><td class="memItemRight" valign="bottom"><b>cached</b> () const</td></tr>
+<tr class="separator:a0a4993742aa177e968d8c146b656e7e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a824f8c7d17a491a4e432fc9cb4971f4c"><td class="memItemLeft" align="right" valign="top"><a id="a824f8c7d17a491a4e432fc9cb4971f4c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setCached</b> (bool <a class="el" href="classQAlphaCloud_1_1StorageSystemsModel.html#aaa7ff7b1811eb5df5ac8213afdbb5b53">cached</a>)</td></tr>
+<tr class="separator:a824f8c7d17a491a4e432fc9cb4971f4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f32cee6ff259002523240d7700d7eba"><td class="memItemLeft" align="right" valign="top"><a id="a0f32cee6ff259002523240d7700d7eba"></a>
+Q_SIGNAL void&#160;</td><td class="memItemRight" valign="bottom"><b>cachedChanged</b> (bool <a class="el" href="classQAlphaCloud_1_1StorageSystemsModel.html#aaa7ff7b1811eb5df5ac8213afdbb5b53">cached</a>)</td></tr>
+<tr class="separator:a0f32cee6ff259002523240d7700d7eba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af46b0f8432f4e1f001d04b36194fecc6"><td class="memItemLeft" align="right" valign="top"><a id="af46b0f8432f4e1f001d04b36194fecc6"></a>
 <a class="el" href="namespaceQAlphaCloud.html#aa99402d07cf88bdc1613eb68ebee78fd">QAlphaCloud::RequestStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><b>status</b> () const</td></tr>
 <tr class="separator:af46b0f8432f4e1f001d04b36194fecc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -175,6 +184,9 @@ Properties</h2></td></tr>
 <a class="el" href="classQAlphaCloud_1_1Connector.html">QAlphaCloud::Connector</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQAlphaCloud_1_1StorageSystemsModel.html#a4f1b93df00c79c9f054ab2dd3672f1b8">connector</a></td></tr>
 <tr class="memdesc:a4f1b93df00c79c9f054ab2dd3672f1b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The connector to use. <br /></td></tr>
 <tr class="separator:a4f1b93df00c79c9f054ab2dd3672f1b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa7ff7b1811eb5df5ac8213afdbb5b53"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQAlphaCloud_1_1StorageSystemsModel.html#aaa7ff7b1811eb5df5ac8213afdbb5b53">cached</a></td></tr>
+<tr class="memdesc:aaa7ff7b1811eb5df5ac8213afdbb5b53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cache the data on disk.  <a href="classQAlphaCloud_1_1StorageSystemsModel.html#aaa7ff7b1811eb5df5ac8213afdbb5b53">More...</a><br /></td></tr>
+<tr class="separator:aaa7ff7b1811eb5df5ac8213afdbb5b53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a313a71f3d66a77904ac9fe3f40063909"><td class="memItemLeft" align="right" valign="top"><a id="a313a71f3d66a77904ac9fe3f40063909"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQAlphaCloud_1_1StorageSystemsModel.html#a313a71f3d66a77904ac9fe3f40063909">count</a></td></tr>
 <tr class="memdesc:a313a71f3d66a77904ac9fe3f40063909"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of items in the model. <br /></td></tr>
@@ -182,9 +194,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 <tr class="memitem:a758b03f541ad9d002ad4fa1578b24573"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQAlphaCloud_1_1StorageSystemsModel.html#a758b03f541ad9d002ad4fa1578b24573">primarySerialNumber</a></td></tr>
 <tr class="memdesc:a758b03f541ad9d002ad4fa1578b24573"><td class="mdescLeft">&#160;</td><td class="mdescRight">The first serial number in the model.  <a href="classQAlphaCloud_1_1StorageSystemsModel.html#a758b03f541ad9d002ad4fa1578b24573">More...</a><br /></td></tr>
 <tr class="separator:a758b03f541ad9d002ad4fa1578b24573"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0dde763f71dfaa3e63bc32b1dc51e844"><td class="memItemLeft" align="right" valign="top"><a id="a0dde763f71dfaa3e63bc32b1dc51e844"></a>
-<a class="el" href="namespaceQAlphaCloud.html#aa99402d07cf88bdc1613eb68ebee78fd">QAlphaCloud::RequestStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQAlphaCloud_1_1StorageSystemsModel.html#a0dde763f71dfaa3e63bc32b1dc51e844">status</a></td></tr>
-<tr class="memdesc:a0dde763f71dfaa3e63bc32b1dc51e844"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current request status. <br /></td></tr>
+<tr class="memitem:a0dde763f71dfaa3e63bc32b1dc51e844"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceQAlphaCloud.html#aa99402d07cf88bdc1613eb68ebee78fd">QAlphaCloud::RequestStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQAlphaCloud_1_1StorageSystemsModel.html#a0dde763f71dfaa3e63bc32b1dc51e844">status</a></td></tr>
+<tr class="memdesc:a0dde763f71dfaa3e63bc32b1dc51e844"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current request status.  <a href="classQAlphaCloud_1_1StorageSystemsModel.html#a0dde763f71dfaa3e63bc32b1dc51e844">More...</a><br /></td></tr>
 <tr class="separator:a0dde763f71dfaa3e63bc32b1dc51e844"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a698d7ea4c5f5014c87bc8541e7bdd3ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceQAlphaCloud.html#ad03a9b8e9aee0d525d6da08956078539">QAlphaCloud::ErrorCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQAlphaCloud_1_1StorageSystemsModel.html#a698d7ea4c5f5014c87bc8541e7bdd3ca">error</a></td></tr>
 <tr class="memdesc:a698d7ea4c5f5014c87bc8541e7bdd3ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">The error, if any.  <a href="classQAlphaCloud_1_1StorageSystemsModel.html#a698d7ea4c5f5014c87bc8541e7bdd3ca">More...</a><br /></td></tr>
@@ -359,6 +370,31 @@ When the request fails, the current data is not cleared. </dd></dl>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="aaa7ff7b1811eb5df5ac8213afdbb5b53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa7ff7b1811eb5df5ac8213afdbb5b53">&#9670;&nbsp;</a></span>cached</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QAlphaCloud::StorageSystemsModel::cached</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">write</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cache the data on disk. </p>
+<p>Whether to cache the storage systems data on disk since it is unlikely to change often. Default is true. </p>
+
+</div>
+</div>
 <a id="a698d7ea4c5f5014c87bc8541e7bdd3ca"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a698d7ea4c5f5014c87bc8541e7bdd3ca">&#9670;&nbsp;</a></span>error</h2>
 
@@ -431,6 +467,31 @@ When the request fails, the current data is not cleared. </dd></dl>
 
 <p>The first serial number in the model. </p>
 <p>This is provided for convenience, so one does not need to deal with QAbstractListModel API for serving the common case of having a single storage system. </p>
+
+</div>
+</div>
+<a id="a0dde763f71dfaa3e63bc32b1dc51e844"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dde763f71dfaa3e63bc32b1dc51e844">&#9670;&nbsp;</a></span>status</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceQAlphaCloud.html#aa99402d07cf88bdc1613eb68ebee78fd">QAlphaCloud::RequestStatus</a> QAlphaCloud::StorageSystemsModel::status</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The current request status. </p>
+<p>The model may contain cached data before a request is sent and even if status is NoRequest. </p>
 
 </div>
 </div>
