@@ -42,14 +42,14 @@ A plug-in for feeding data into [KDE’s System Monitor](https://apps.kde.org/pl
 
 It enables you to create both complex monitor pages for all aspects of your solar and energy storage installation as well as add relevant meters right to your desktop.
 
-![Screenshot of Plasma System Monitor showing various line charts with live photovoltaic information](artwork/Screenshot_systemmonitor.png?raw=true "Plasma System Monitor plug-in")
+![Screenshot of Plasma System Monitor showing various line charts with live photovoltaic information](https://github.com/kbroulik/qalphacloud/raw/master/artwork/Screenshot_systemmonitor.png?raw=true "Plasma System Monitor plug-in")
 *How cool is that? You can have both CPU load and photovoltaic energy production on the same page!*
 
 ### KInfoCenter module
 
 A module for displaying historic energy production and consumption data in KInfoCenter.
 
-![Screenshot of KInfoCenter module showing historic energy production data and live solar information](artwork/Screenshot_infocenter.png?raw=true "KInfoCenter module")
+![Screenshot of KInfoCenter module showing historic energy production data and live solar information](https://github.com/kbroulik/qalphacloud/raw/master/artwork/Screenshot_infocenter.png?raw=true "KInfoCenter module")
 *KInfoCenter module showing both live and historic photovoltaic information*
 
 ### Command-Line Interface
@@ -85,7 +85,7 @@ Over the course of just a few evenings I ended up creating a proper shared libra
 
 KDE’s [Extra CMake Modules](https://api.kde.org/frameworks/extra-cmake-modules/html/index.html) make creating libraries with CMake a lot nicer and their powerful yet easy-to-use [KQuickCharts](https://api.kde.org/frameworks/kquickcharts/html/index.html) Framework produces beautiful and fully hardware-accelerated diagrams. The _KSystemStats_ daemon is then used to feed data into [System Monitor](https://apps.kde.org/plasma-systemmonitor/) which offers both a fully customizable UI as well as simple desktop and panel widgets.
 
-![Screenshot of a Plasma Notification popup: “First Ray of Sun: The first 500 Wh of solar energy have been produced today.”](artwork/Screenshot_kdednotifier.png?raw=true "Plasma Notification about the first way of sun")
+![Screenshot of a Plasma Notification popup: “First Ray of Sun: The first 500 Wh of solar energy have been produced today.”](https://github.com/kbroulik/qalphacloud/raw/master/artwork/Screenshot_kdednotifier.png?raw=true "Plasma Notification about the first way of sun")
 *Plasma notifying about the first ray of sun. Go start the dishwasher! (Not included in this repository yet)*
 
 While I am aware that the number of people who operate this particular system _and_ are interested in C++/Qt development is miniscule, it’s still a useful project for me personally and is a good exercise in system integration. More importantly, though, this should serve as an inspiration for the [KDE Eco initiative](https://eco.kde.org/), for example to build an infrastructure to do system maintenance tasks such as installing updates only when the sun is shining.
