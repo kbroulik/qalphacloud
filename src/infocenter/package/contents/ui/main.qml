@@ -200,6 +200,9 @@ KCM.SimpleKCM {
         onTriggered: {
             liveData.reload();
         }
+        onRunningChanged: {
+            root.currentDate = new Date();
+        }
     }
 
     component ReloadAction : QQC2.Action {
