@@ -720,6 +720,7 @@ KCM.SimpleKCM {
                             // The same color as a Kirigami.Separator
                             major.color: Kirigami.ColorUtils.linearInterpolation(Kirigami.Theme.backgroundColor, Kirigami.Theme.textColor, 0.2)
                             minor.visible: false
+                            minor.color: Kirigami.ColorUtils.linearInterpolation(Kirigami.Theme.backgroundColor, Kirigami.Theme.textColor, 0.05)
                         }
 
                         // Vertical Lines
@@ -733,8 +734,10 @@ KCM.SimpleKCM {
                             major.lineWidth: 1
                             // The same color as a Kirigami.Separator
                             major.color: horizontalLines.major.color
-                            minor.visible: true//false
-                            minor.count: 3
+                            minor.visible: true
+                            minor.count: 23
+                            minor.color: horizontalLines.minor.color
+                            minor.lineWidth: 1
                         }
                     }
 
