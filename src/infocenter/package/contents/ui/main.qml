@@ -50,6 +50,8 @@ KCM.SimpleKCM {
         batterySocSource, currentLoadSource, gridChargeSource, gridFeedSource, photovoltaicEnergySource
     ]
 
+    readonly property var enabledSensors: allSensors.filter(sensor => sensor.enabled);
+
     function formatAsWatt(watt : int) {
         return qsTr("%L1 W").arg(watt);
     }
@@ -129,6 +131,7 @@ KCM.SimpleKCM {
 
     QAlphaCloud.OneDayPowerModel {
         id: historyModel
+        readonly property int entriesInADay: 60 / 5 * 24
         connector: cloudConnector
         serialNumber: root.currentSerialNumber
         date: root.currentDate
@@ -138,6 +141,7 @@ KCM.SimpleKCM {
         id: batterySocSource
         readonly property color color: root.batteryGreen
         readonly property string name: qsTr("Battery %")
+        readonly property int role: QAlphaCloud.OneDayPowerModel.Roles.BatterySoc
         // TODO remember this in a config file.
         property bool enabled: false
 
@@ -151,6 +155,7 @@ KCM.SimpleKCM {
         id: currentLoadSource
         readonly property color color: root.loadBlue
         readonly property string name: qsTr("Current Load")
+        readonly property int role: QAlphaCloud.OneDayPowerModel.Roles.CurrentLoad
         property bool enabled: true
 
         model: historyModel
@@ -160,6 +165,7 @@ KCM.SimpleKCM {
         id: gridFeedSource
         readonly property color color: root.feedPurple
         readonly property string name: qsTr("Grid Feed")
+        readonly property int role: QAlphaCloud.OneDayPowerModel.Roles.GridFeed
         property bool enabled: true
 
         model: historyModel
@@ -169,6 +175,7 @@ KCM.SimpleKCM {
         id: gridChargeSource
         readonly property color color: root.gridRed
         readonly property string name: qsTr("Grid Charge")
+        readonly property int role: QAlphaCloud.OneDayPowerModel.Roles.GridCharge
         property bool enabled: true
 
         model: historyModel
@@ -178,6 +185,7 @@ KCM.SimpleKCM {
         id: photovoltaicEnergySource
         readonly property color color: root.solarYellow
         readonly property string name: qsTr("Photovoltaic")
+        readonly property int role: QAlphaCloud.OneDayPowerModel.Roles.PhotovoltaicEnergy
         property bool enabled: true
 
         model: historyModel
@@ -652,7 +660,7 @@ KCM.SimpleKCM {
                             // FIXME Take into account fromDate.
                             from: 0
                             // There's an entry every five minutes.
-                            to: Math.max(historyModel.count, 60 / 5 * 24)
+                            to: Math.max(historyModel.count, historyModel.entriesInADay)
                             automatic: false
                         }
                         yRange {
@@ -667,19 +675,6 @@ KCM.SimpleKCM {
                             automatic: false
                         }
 
-                        // Urgh, isn't this heavy? Can we not have a "pointAtXY"?
-                        /*pointDelegate: MouseArea {
-                            id: pointDelegate
-                            width: 20
-                            height: 20
-                            hoverEnabled: true
-
-                            QQC2.ToolTip {
-                                text: pointDelegate.Charts.LineChart.value
-                                visible: parent.containsMouse
-                            }
-                        }*/
-
                         valueSources: {
                             if (solarLegendArea.containsMouse || solarLegendArea.pressed) {
                                 return [photovoltaicEnergySource];
@@ -690,7 +685,7 @@ KCM.SimpleKCM {
                             } else if (batteryLegendArea.containsMouse || batteryLegendArea.pressed) {
                                 return [batterySocSource];
                             } else {
-                                return root.allSensors.filter(sensor => sensor.enabled);
+                                return root.enabledSensors;
                             }
                         }
 
@@ -738,6 +733,82 @@ KCM.SimpleKCM {
                             minor.count: 23
                             minor.color: horizontalLines.minor.color
                             minor.lineWidth: 1
+                        }
+
+                        MouseArea {
+                            id: chartArea
+                            anchors.fill: parent
+                            hoverEnabled: true
+                        }
+
+                        QQC2.ToolTip {
+                            id: chartToolTip
+                            readonly property real hitAreaWidth: chartArea.width / historyModel.entriesInADay
+                            readonly property var modelIndex: {
+                                const row = chartArea.mouseX / hitAreaWidth - hitAreaWidth / 2;
+                                if (row < historyModel.count) {
+                                    return historyModel.index(row, 0);
+                                } else {
+                                    return null;
+                                }
+                            }
+
+                            readonly property var uploadTime: modelIndex && modelIndex.valid ? historyModel.data(modelIndex, QAlphaCloud.OneDayPowerModel.Roles.UploadTime) : null
+
+                            // QQC2 ToolTip auto-positioning is borked...
+                            x: chartArea.mouseX > chartArea.width - width ? chartArea.mouseX - width : chartArea.mouseX
+                            y: chartArea.mouseY > chartArea.height - height ? chartArea.mouseY - height : chartArea.mouseY
+                            visible: chartArea.containsMouse && modelIndex && modelIndex.valid
+
+                            TextMetrics {
+                                id: toolTipMetrics
+                                text: root.formatAsWatt(10000)
+                                font.bold: true
+                            }
+
+                            ColumnLayout {
+                                Kirigami.ListSectionHeader {
+                                    Layout.fillWidth: true
+                                    padding: 0
+                                    topPadding: 0
+                                    text: chartToolTip.uploadTime ? chartToolTip.uploadTime.toLocaleTimeString(Qt.locale(), Locale.ShortFormat) : ""
+                                }
+
+                                Repeater {
+                                    model: root.enabledSensors
+
+                                    RowLayout {
+                                        id: toolTipValueRow
+                                        readonly property var value: chartToolTip.modelIndex && chartToolTip.modelIndex.valid ? historyModel.data(chartToolTip.modelIndex, modelData.role) : 0
+                                        Layout.fillWidth: true
+
+                                        LegendDot {
+                                            Layout.fillHeight: true
+                                            fillColor: modelData.color
+                                        }
+
+                                        QQC2.Label {
+                                            Layout.fillWidth: true
+                                            text: modelData.name
+                                        }
+
+                                        QQC2.Label {
+                                            Layout.fillWidth: true
+                                            Layout.minimumWidth: toolTipMetrics.advanceWidth
+                                            horizontalAlignment: Text.AlignRight
+                                            text: {
+                                                if (modelData.role === QAlphaCloud.OneDayPowerModel.Roles.BatterySoc) {
+                                                    return root.formatAsPercent(toolTipValueRow.value / 100);
+                                                } else {
+                                                    return root.formatAsWatt(toolTipValueRow.value);
+                                                }
+                                            }
+                                            font.bold: true
+                                            opacity: toolTipValueRow.value > 0 ? 1 : 0.3
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
 
