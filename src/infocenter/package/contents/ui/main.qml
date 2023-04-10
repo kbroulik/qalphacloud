@@ -638,7 +638,7 @@ KCM.SimpleKCM {
                             font: Kirigami.Theme.smallFont
                             // don't use ShowNull.
                             text: Formatter.Formatter.formatValue(Charts.AxisLabels.label,
-                                Formatter.Units.UnitWatts)
+                                Formatter.Units.UnitWatt)
                             color: Kirigami.Theme.disabledTextColor
                         }
                         source: Charts.ChartAxisSource {
