@@ -49,7 +49,7 @@ QString errorText(ErrorCode code, const QVariant &details)
 
     case ErrorCode::ParameterError:
         if (detailsString.isEmpty()) {
-            return QCoreApplication::translate("errorText", "Unexpected JSON content received.");
+            return QCoreApplication::translate("errorText", "Invalid parameter provided.");
         }
         break;
     case ErrorCode::SnNotBoundToUser:
