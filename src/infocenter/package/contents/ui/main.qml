@@ -28,12 +28,8 @@ KCM.SimpleKCM {
     readonly property string currentSerialNumber: systemCombo.currentValue || ""
 
     property date currentDate: new Date()
-    readonly property bool isToday: {
-        const now = new Date();
-        return currentDate.getDate() == now.getDate()
-            && currentDate.getMonth() === now.getMonth()
-            && currentDate.getFullYear() === now.getFullYear();
-    }
+    // not readonly so we can refresh it periodically.
+    property bool isToday: isDateToday(currentDate)
 
     readonly property color loadBlue: "#3ea5ff"
     readonly property color batteryGreen: "#805bff3e"
@@ -62,6 +58,13 @@ KCM.SimpleKCM {
 
     function formatAsPercent(percent : real) {
         return qsTr("%L1 %").arg( (percent * 100).toLocaleString(Qt.locale(), 'f', 1));
+    }
+
+    function isDateToday(date) {
+        const now = new Date();
+        return date.getDate() === now.getDate()
+            && date.getMonth() === now.getMonth()
+            && date.getFullYear() === now.getFullYear();
     }
 
     function goDayOffset(dayOffset : int) {
@@ -201,7 +204,9 @@ KCM.SimpleKCM {
             liveData.reload();
         }
         onRunningChanged: {
-            root.currentDate = new Date();
+            root.isToday = Qt.binding(() => {
+                return root.isDateToday(root.currentDate);
+            });
         }
     }
 
