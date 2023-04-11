@@ -233,6 +233,7 @@ You can find examples for both C++ and QML in the [examples](examples/) director
 * None of the EV-related readouts are implemented.
 * None of the charging configuration settings (`getChargeConfigInfo`, `updateChargeConfigInfo`, `getDisChargeConfigInfo`, `updateDisChargeConfigInfo`) can be read or altered.
 * Localization. All user-visible strings are marked for translation with `tr` or `qsTr` but the infrastructure for extracting and importing them has not been set up.
+* Sometimes, when rapidly switching between dates, the API returns `null` for all fields without returning an error code. I consider this an API issue but we could do a tentative reload when this happens.
 
 ## :paperclips: Licensing
 

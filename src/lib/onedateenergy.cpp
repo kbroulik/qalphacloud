@@ -332,8 +332,8 @@ bool OneDateEnergy::reload()
         d->processApiResult(json);
 
         // Don't cache today's data as it will gain new data as the day progresses.
-        // Also don't cache if there is no data.
-        if (d->m_cached && !json.isEmpty() && date != QDate::currentDate()) {
+        // Also don't cache if there is no valid data.
+        if (d->m_cached && d->m_valid && date != QDate::currentDate()) {
             d->m_cache.insert(date, json);
         }
     });
