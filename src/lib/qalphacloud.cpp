@@ -103,6 +103,12 @@ QString errorText(ErrorCode code, const QVariant &details)
         }
         break;
 
+    case ErrorCode::InvalidDate:
+        if (detailsString.isEmpty()) {
+            return QCoreApplication::translate("errorText", "Invalid date provided.");
+        }
+        break;
+
     case ErrorCode::VerificationCode:
         if (detailsString.isEmpty()) {
             return QCoreApplication::translate("errorText", "Verification code error.");

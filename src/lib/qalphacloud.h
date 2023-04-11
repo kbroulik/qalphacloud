@@ -67,6 +67,8 @@ enum class ErrorCode {
     TimestampEmpty = 6011, ///< "timestamp is empty"
     AppIdEmpty = 6012, ///< "AppId is empty"
 
+    InvalidDate = 6026, ///< Date is invalid, undocumented. Also returned when requesting historic data for a future date.
+
     VerificationCode = 6046, ///< "Verification code error"
 };
 Q_ENUM_NS(ErrorCode)
