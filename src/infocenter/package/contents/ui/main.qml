@@ -210,6 +210,21 @@ KCM.SimpleKCM {
         }
     }
 
+    Timer {
+        // We get history model data every 5 minutes.
+        interval: 5 * 60 * 1000
+        // Not stopping on application inactive, otherwise the window
+        // would have to be focussed for 10 minutes to update at all.
+        running: true
+        repeat: true
+        onTriggered: {
+            if (Qt.application.active) {
+                cumulativeData.reload();
+                historyModel.reload();
+            }
+        }
+    }
+
     component ReloadAction : QQC2.Action {
         text: qsTr("Reload")
         icon.name: "view-refresh"
