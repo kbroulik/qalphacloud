@@ -257,6 +257,7 @@ Examples</h3>
 <li>None of the EV-related readouts are implemented.</li>
 <li>None of the charging configuration settings (<code>getChargeConfigInfo</code>, <code>updateChargeConfigInfo</code>, <code>getDisChargeConfigInfo</code>, <code>updateDisChargeConfigInfo</code>) can be read or altered.</li>
 <li>Localization. All user-visible strings are marked for translation with <code>tr</code> or <code>qsTr</code> but the infrastructure for extracting and importing them has not been set up.</li>
+<li>Sometimes, when rapidly switching between dates, the API returns <code>null</code> for all fields without returning an error code. I consider this an API issue but we could do a tentative reload when this happens.</li>
 </ul>
 <h2><a class="anchor" id="autotoc_md29"></a>
 :paperclips: Licensing</h2>
