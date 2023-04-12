@@ -31,8 +31,7 @@ public:
     void update();
 
 private:
-    void updateGridPower(int power);
-    void updateBatteryPower(int power);
+    void reload();
 
     QAlphaCloud::LastPowerData *m_liveData = nullptr;
 

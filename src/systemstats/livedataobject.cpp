@@ -33,7 +33,7 @@ LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString 
     connect(&m_rateLimitTimer, &QTimer::timeout, this, [this] {
         if (m_updatePending) {
             m_updatePending = false;
-            update();
+            reload();
         }
     });
 
@@ -48,11 +48,6 @@ LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString 
     m_photovoltaicPowerProperty->setMin(0);
     // m_photovoltaicPowerProperty->setMax(photovoltaicDesignPower * 1000);
     connect(m_photovoltaicPowerProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
-    // This is in Watt.
-    connect(m_liveData, &QAlphaCloud::LastPowerData::photovoltaicPowerChanged, this, [this](int power) {
-        m_photovoltaicPowerProperty->setValue(power);
-    });
-    m_photovoltaicPowerProperty->setValue(m_liveData->photovoltaicPower());
 
     // Current consumer load:
     m_currentLoadProperty = new KSysGuard::SensorProperty(QStringLiteral("currentLoad"), tr("Current Load"), 0, this);
@@ -63,11 +58,6 @@ LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString 
     // TODO inverter power or something
     // m_currentLoadProperty->setMax(photovoltaicDesignPower * 1000);
     connect(m_currentLoadProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
-    connect(m_liveData, &QAlphaCloud::LastPowerData::currentLoadChanged, this, [this](int currentLoad) {
-        // NOTE: This sometimes gets negative.
-        m_currentLoadProperty->setValue(std::max(0, currentLoad));
-    });
-    m_currentLoadProperty->setValue(m_liveData->currentLoad());
 
     // Power being fed to the grid:
     m_gridFeedProperty = new KSysGuard::SensorProperty(QStringLiteral("gridFeed"),
@@ -82,7 +72,6 @@ LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString 
     // TODO inverter power or something
     // m_gridFeedProperty->setMax(photovoltaicDesignPower * 1000);
     connect(m_gridFeedProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
-    // TODO set value
 
     // Poewr being consumed from the grid:
     m_gridConsumptionProperty = new KSysGuard::SensorProperty(QStringLiteral("gridConsumption"), tr("Grid Consumption"), 0, this);
@@ -95,8 +84,6 @@ LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString 
     // m_gridConsumptionProperty->setMax(photovoltaicDesignPower * 1000);
     connect(m_gridConsumptionProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
 
-    connect(m_liveData, &QAlphaCloud::LastPowerData::gridPowerChanged, this, &LiveDataObject::updateGridPower);
-
     // Battery state of charge:
     m_batterySocProperty = new KSysGuard::SensorProperty(QStringLiteral("batterySoc"), tr("State of Charge"), 0, this);
     m_batterySocProperty->setShortName(tr("SOC"));
@@ -106,9 +93,6 @@ LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString 
     m_batterySocProperty->setMax(100.0);
     m_batterySocProperty->setMin(0.0);
     connect(m_batterySocProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
-    connect(m_liveData, &QAlphaCloud::LastPowerData::batterySocChanged, this, [this](qreal soc) {
-        m_batterySocProperty->setValue(soc);
-    });
 
     // Battery charging rate:
     m_batteryChargeProperty = new KSysGuard::SensorProperty(QStringLiteral("batteryCharge"), tr("Battery Charge"), 0, this);
@@ -130,8 +114,6 @@ LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString 
     // m_batteryDischargeProperty->setMax(photovoltaicDesignPower * 1000);
     connect(m_batteryDischargeProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
 
-    connect(m_liveData, &QAlphaCloud::LastPowerData::batteryPowerChanged, this, &LiveDataObject::updateBatteryPower);
-
 #if PRESENTATION_BUILD
     //: Sensor object name with live data
     setName(tr("Live"));
@@ -145,39 +127,52 @@ LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString 
     QMetaObject::invokeMethod(this, &LiveDataObject::update, Qt::QueuedConnection);
 }
 
-void LiveDataObject::updateGridPower(int power)
+// Update all values in lock-step when ksystemstats asks us to rather than updating them
+// when the relevant property change is emitted.
+void LiveDataObject::update()
 {
+    reload();
+
+    if (!m_liveData->valid()) {
+        return;
+    }
+
+    m_photovoltaicPowerProperty->setValue(m_liveData->photovoltaicPower());
+    // NOTE: This sometimes gets negative.
+    m_currentLoadProperty->setValue(std::max(0, m_liveData->currentLoad()));
+
     // gridPower is negative when feeding power, positive when consuming power.
     // This is a convenience sensor only showing when power is fed into the grid.
+    const int gridPower = m_liveData->gridPower();
     int gridFeed = 0;
     int gridConsumption = 0;
 
-    if (power < 0) {
-        gridFeed = -power;
-    } else if (power > 0) {
-        gridConsumption = power;
+    if (gridPower < 0) {
+        gridFeed = -gridPower;
+    } else if (gridPower > 0) {
+        gridConsumption = gridPower;
     }
 
     m_gridFeedProperty->setValue(gridFeed);
     m_gridConsumptionProperty->setValue(gridConsumption);
-}
 
-void LiveDataObject::updateBatteryPower(int power)
-{
+    m_batterySocProperty->setValue(m_liveData->batterySoc());
+
+    const int batteryPower = m_liveData->batteryPower();
     int batteryCharge = 0;
     int batteryDischarge = 0;
 
-    if (power < 0) {
-        batteryCharge = -power;
-    } else if (power > 0) {
-        batteryDischarge = power;
+    if (batteryPower < 0) {
+        batteryCharge = -batteryPower;
+    } else if (batteryPower > 0) {
+        batteryDischarge = batteryPower;
     }
 
     m_batteryChargeProperty->setValue(batteryCharge);
     m_batteryDischargeProperty->setValue(batteryDischarge);
 }
 
-void LiveDataObject::update()
+void LiveDataObject::reload()
 {
     if (!m_photovoltaicPowerProperty->isSubscribed() && !m_currentLoadProperty->isSubscribed() && !m_gridFeedProperty->isSubscribed()
         && !m_gridConsumptionProperty->isSubscribed() && !m_batterySocProperty->isSubscribed() && !m_batteryChargeProperty->isSubscribed()
