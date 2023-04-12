@@ -34,6 +34,10 @@ class KCMAlphaCloud : public KQuickAddons::ConfigModule
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool presentationBuild READ presentationBuild CONSTANT)
+
 public:
     explicit KCMAlphaCloud(QObject *parent, const KPluginMetaData &data, const QVariantList &args);
+
+    bool presentationBuild() const;
 };

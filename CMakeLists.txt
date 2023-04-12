@@ -50,6 +50,9 @@ add_feature_info(BUILD_EXAMPLES ${BUILD_EXAMPLES} "Example code")
 set(API_URL "https://openapi.alphaess.com/api/" CACHE STRING "Default API URL")
 add_feature_info(API_URL On "Default API URL is '${API_URL}'")
 
+option(PRESENTATION_BUILD "Hide sensitive information, such as serial numbers, for use in a presentation" OFF)
+add_feature_info(PRESENTATION_BUILD ${PRESENTATION_BUILD} "Presentation build")
+
 # Those options come from ECM
 add_feature_info(BUILD_TESTING ${BUILD_TESTING} "Unit tests")
 add_feature_info(BUILD_COVERAGE ${BUILD_COVERAGE} "Code coverage (gcov)")

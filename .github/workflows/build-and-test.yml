@@ -105,3 +105,41 @@ jobs:
         BUILD_DIR: "build/"
       run: |
         MAKEFLAGS=-j$(nproc) cmake --build ${BUILD_DIR}
+
+  build-presentation:
+    strategy:
+      matrix:
+        config:
+        - {name: "Ubuntu 22.04 (GCC)", os: "ubuntu-22.04", CC: "gcc", CXX: "g++"}
+        #- {name: "Ubuntu 22.04 (Clang)", os: "ubuntu-22.04", CC: "clang", CXX: "clang++"}
+
+    name: ${{matrix.config.name}}
+    runs-on: ${{matrix.config.os}}
+
+    steps:
+    - name: Install dependencies
+      env:
+        DEBIAN_FRONTEND: "noninteractive"
+      run: sudo apt-get update && sudo apt-get install -y build-essential cmake qtbase5-dev qtdeclarative5-dev qtquickcontrols2-5-dev extra-cmake-modules libkf5coreaddons-dev libkf5declarative-dev libkf5sysguard-dev libsensors-dev
+      # TODO libsensors should be pulled in by KSystemStats...
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Configure
+      env:
+        CC: ${{matrix.config.CC}}
+        CXX: ${{matrix.config.CXX}}
+        BUILD_DIR: "build/"
+      run: |
+        cmake -B ${BUILD_DIR} -DBUILD_EXAMPLES=ON -DBUILD_TESTING=OFF -DPRESENTATION_BUILD=ON
+
+    - name: Build
+      env:
+        CC: ${{matrix.config.CC}}
+        CXX: ${{matrix.config.CXX}}
+        BUILD_DIR: "build/"
+      run: |
+        MAKEFLAGS=-j$(nproc) cmake --build ${BUILD_DIR}

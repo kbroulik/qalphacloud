@@ -15,6 +15,8 @@
 #include <systemstats/SensorObject.h>
 #include <systemstats/SensorProperty.h>
 
+#include "config-alphacloud.h"
+
 using namespace QAlphaCloud;
 
 SystemObject::SystemObject(const QString &serialNumber,
@@ -61,20 +63,37 @@ SystemObject::SystemObject(const QString &serialNumber,
     // Tried setting this as "max" for the PV power sensor but that caused the
     // scale to always use that value which was annoying.
 
+#if PRESENTATION_BUILD
+    //: Sensor object name with system information
+    setName(tr("System"));
+#else
     //: Sensor object name with system information
     setName(tr("%1 (System)").arg(serialNumber));
+#endif
 }
 
 void SystemObject::update(const QModelIndex &index)
 {
+#if PRESENTATION_BUILD
+    m_serialNumberProperty->setValue(tr("<Serial Number>"));
+#else
     const QString serialNumber = index.data(static_cast<int>(StorageSystemsModel::Roles::SerialNumber)).toString();
     m_serialNumberProperty->setValue(serialNumber);
+#endif
 
+#if PRESENTATION_BUILD
+    m_inverterModelProperty->setValue(tr("<Inverter Model>"));
+#else
     const QString inverterModel = index.data(static_cast<int>(StorageSystemsModel::Roles::InverterModel)).toString();
     m_inverterModelProperty->setValue(inverterModel);
+#endif
 
+#if PRESENTATION_BUILD
+    m_batteryModelProperty->setValue(tr("<Battery Model>"));
+#else
     const QString batteryModel = index.data(static_cast<int>(StorageSystemsModel::Roles::BatteryModel)).toString();
     m_batteryModelProperty->setValue(batteryModel);
+#endif
 
     const auto batteryGrossCapacity = index.data(static_cast<int>(StorageSystemsModel::Roles::BatteryGrossCapacity)).value<int>();
     m_batteryGrossCapacityProperty->setValue(batteryGrossCapacity);

@@ -127,6 +127,7 @@ By default, all features and dependencies (except example code) are enabled. You
 | **BUILD_TESTING** | **ON** | Build unit tests
 | **BUILD_COVERAGE** | **OFF** | Build with test coverage (*gcov*) enabled
 | **BUILD_EXAMPLES** | **OFF** | Build examples in the [examples](examples/) directory
+| **PRESENTATION_BUILD** | **OFF** | Hide sensitive information, such as serial numbers, for use in a presentation
 | **API_URL** | https://openapi.alphaess.com/api/ | API URL to use, defaults to the official endpoint
 
 ### Logging Categories

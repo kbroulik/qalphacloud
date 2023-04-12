@@ -12,6 +12,8 @@
 #include <QAlphaCloud/LastPowerData>
 #include <QAlphaCloud/StorageSystemsModel>
 
+#include "config-alphacloud.h"
+
 using namespace QAlphaCloud;
 
 LiveDataWidget::LiveDataWidget(QWidget *parent)
@@ -60,7 +62,11 @@ void LiveDataWidget::onStorageSystemsModelStatusChanged(RequestStatus status)
         m_ui.serialNumberLabel->setText(tr("Loading…"));
     } else if (status == RequestStatus::Finished) {
         // Storage systems have loaded, now load live data from the primary serial number.
+#if PRESENTATION_BUILD
+        m_ui.serialNumberLabel->setText(tr("<Serial Number>"));
+#else
         m_ui.serialNumberLabel->setText(m_storageSystems->primarySerialNumber());
+#endif
         m_liveData->setSerialNumber(m_storageSystems->primarySerialNumber());
         m_liveData->reload();
     } else if (status == RequestStatus::Error) {

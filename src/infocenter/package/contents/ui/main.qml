@@ -366,9 +366,9 @@ KCM.SimpleKCM {
 
                 // Single system display
                 QQC2.Label {
-                    text: root.currentSerialNumber
+                    text: kcm.presentationBuild ? qsTr("<Serial Number>") : root.currentSerialNumber
                     textFormat: Text.PlainText
-                    visible: systemCombo.count === 1
+                    visible: systemCombo.count === 1 || kcm.presentationBuild
                 }
 
                 // Multiple system combo
@@ -379,7 +379,8 @@ KCM.SimpleKCM {
                     textRole: "serialNumber"
                     valueRole: "serialNumber"
                     currentIndex: 0
-                    visible: count > 1
+                    // Don't bother anonymizing the combobox, just hide it.
+                    visible: count > 1 && !kcm.presentationBuild
                 }
 
                 QQC2.Button {

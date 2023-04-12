@@ -9,6 +9,8 @@
 
 #include <QAlphaCloud/OneDayPowerModel>
 
+#include "config-alphacloud.h"
+
 K_PLUGIN_CLASS_WITH_JSON(KCMAlphaCloud, "kcm_qalphacloud.json")
 
 BatterySocScaleProxyModel::BatterySocScaleProxyModel(QObject *parent)
@@ -51,6 +53,15 @@ KCMAlphaCloud::KCMAlphaCloud(QObject *parent, const KPluginMetaData &data, const
     qmlRegisterType<BatterySocScaleProxyModel>("de.broulik.qalphacloud.private.kcm", 1, 0, "BatterySocScaleProxyModel");
 
     setButtons(KQuickAddons::ConfigModule::NoAdditionalButton);
+}
+
+bool KCMAlphaCloud::presentationBuild() const
+{
+#if PRESENTATION_BUILD
+    return true;
+#else
+    return false;
+#endif
 }
 
 #include "kcm.moc"
