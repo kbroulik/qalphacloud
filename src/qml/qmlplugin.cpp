@@ -208,4 +208,6 @@ void QAlphaCloudQmlPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableMetaObject(QAlphaCloud::staticMetaObject, uri, 1, 0, "QAlphaCloud", tr("Cannot create instances of QAlphaCloud."));
 }
 
+#ifndef CLAZY_RUN
 #include "qmlplugin.moc"
+#endif

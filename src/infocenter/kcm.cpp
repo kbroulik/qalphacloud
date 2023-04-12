@@ -64,4 +64,6 @@ bool KCMAlphaCloud::presentationBuild() const
 #endif
 }
 
+#ifndef CLAZY_RUN
 #include "kcm.moc"
+#endif

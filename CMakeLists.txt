@@ -47,6 +47,13 @@ add_feature_info(KINFOCENTER ${BUILD_KINFOCENTER} "Plug-in for KDE's Info Center
 option(BUILD_EXAMPLES "Build examples" OFF)
 add_feature_info(BUILD_EXAMPLES ${BUILD_EXAMPLES} "Example code")
 
+option(CLAZY_RUN "Clazy run" OFF)
+if (CLAZY_RUN)
+    add_compile_definitions(-DCLAZY_RUN=1)
+    # We want any Clazy warning to be fatal.
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -Werror)
+endif()
+
 set(API_URL "https://openapi.alphaess.com/api/" CACHE STRING "Default API URL")
 add_feature_info(API_URL On "Default API URL is '${API_URL}'")
 

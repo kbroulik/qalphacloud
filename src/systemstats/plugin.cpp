@@ -145,4 +145,6 @@ void SystemStatsPlugin::update()
     }
 }
 
+#ifndef CLAZY_RUN
 #include "plugin.moc"
+#endif

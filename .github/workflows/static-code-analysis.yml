@@ -1,0 +1,42 @@
+# SPDX-License-Identifier: BSD-2-Clause
+#
+# SPDX-FileCopyrightText: 2023 Kai Uwe Broulik <ghqalpha@broulik.de>
+
+name: Static Code Analysis
+
+on: ["push", "pull_request"]
+
+jobs:
+  static-code-analysis:
+    strategy:
+      matrix:
+        config:
+        - {name: "Ubuntu 22.04 (Clang)", os: "ubuntu-22.04", CC: "clang", CXX: "clang++"}
+
+    name: ${{matrix.config.name}}
+    runs-on: ${{matrix.config.os}}
+
+    steps:
+    - name: Install dependencies
+      env:
+        DEBIAN_FRONTEND: "noninteractive"
+      run: sudo apt-get update && sudo apt-get install -y build-essential cmake clazy clang-tidy qtbase5-dev qtdeclarative5-dev qtquickcontrols2-5-dev extra-cmake-modules libkf5coreaddons-dev libkf5declarative-dev libkf5sysguard-dev libsensors-dev
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Export Compile Commands
+      env:
+        CC: ${{matrix.config.CC}}
+        CXX: ${{matrix.config.CXX}}
+        BUILD_DIR: "build/"
+      run: |
+        cmake -B ${BUILD_DIR} -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCLAZY_RUN=ON
+
+    - name: Clazy
+      env:
+        BUILD_DIR: "build/"
+      run: |
+        find src/ -name '*.cpp' | xargs clazy-standalone -p ${BUILD_DIR}compile_commands.json
