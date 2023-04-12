@@ -129,9 +129,11 @@ void OneDateEnergyTest::testData()
     QCOMPARE(energy.photovoltaic(), 20100); // WattHours.
     QCOMPARE(energy.input(), 30);
     QCOMPARE(energy.output(), 14630);
-    // QCOMPARE(energy.charge(), 2800);
-    // QCOMPARE(energy.discharge(), 1000);
+    QCOMPARE(energy.charge(), 2800);
+    QCOMPARE(energy.discharge(), 1000);
     QCOMPARE(energy.gridCharge(), 10);
+    // pv + discharge + input - output - charge
+    QCOMPARE(energy.totalLoad(), 20100 + 1000 + 30 - 14630 - 2800);
 
     // Also verify the raw JSON with the JSON from the file.
     QFile testFile1(testData1Path);
@@ -162,9 +164,11 @@ void OneDateEnergyTest::testData()
     QCOMPARE(energy.photovoltaic(), 200); // WattHours.
     QCOMPARE(energy.input(), 3500);
     QCOMPARE(energy.output(), 100);
-    // QCOMPARE(energy.charge(), 100);
-    // QCOMPARE(energy.discharge(), 1100);
+    QCOMPARE(energy.charge(), 100);
+    QCOMPARE(energy.discharge(), 1100);
     QCOMPARE(energy.gridCharge(), 2800);
+    // pv + discharge + input - output - charge
+    QCOMPARE(energy.totalLoad(), 200 + 1100 + 3500 - 100 - 100);
 
     // Also verify the raw JSON with the JSON from the file.
     QFile testFile2(testData2Path);

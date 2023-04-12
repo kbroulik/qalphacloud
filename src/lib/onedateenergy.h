@@ -81,8 +81,14 @@ class QALPHACLOUD_EXPORT OneDateEnergy : public QObject
      */
     Q_PROPERTY(int output READ output NOTIFY outputChanged)
 
-    // Q_PROPERTY(int charge READ charge NOTIFY chargeChanged)
-    // Q_PROPERTY(int discharge READ discharge NOTIFY dischargeChanged)
+    /**
+     * @brief Energy charged into the battery in Wh.
+     */
+    Q_PROPERTY(int charge READ charge NOTIFY chargeChanged)
+    /**
+     * @brief Energy discharged from the battery in Wh.
+     */
+    Q_PROPERTY(int discharge READ discharge NOTIFY dischargeChanged)
     /**
      * @brief Battery charge from grid in Wh.
      *
@@ -175,11 +181,11 @@ public:
     Q_REQUIRED_RESULT int output() const;
     Q_SIGNAL void outputChanged(int output);
 
-    // Q_REQUIRED_RESULT int charge() const;
-    // Q_SIGNAL void chargeChanged(int charge);
+    Q_REQUIRED_RESULT int charge() const;
+    Q_SIGNAL void chargeChanged(int charge);
 
-    // Q_REQUIRED_RESULT int discharge() const;
-    // Q_SIGNAL void dischargeChanged(int discharge);
+    Q_REQUIRED_RESULT int discharge() const;
+    Q_SIGNAL void dischargeChanged(int discharge);
 
     Q_REQUIRED_RESULT int gridCharge() const;
     Q_SIGNAL void gridChargeChanged(int gridCharge);

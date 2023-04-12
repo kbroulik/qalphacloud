@@ -39,8 +39,8 @@ public:
     int m_photovoltaic = 0; // epv
     int m_input = 0; // eInput
     int m_output = 0; // eOutput
-    // int m_charge = 0; // eCharge
-    // int m_discharge = 0; // eDischarge
+    int m_charge = 0; // eCharge
+    int m_discharge = 0; // eDischarge
     int m_gridCharge = 0; // eGridCharge
 
     QJsonObject m_json;
@@ -107,6 +107,18 @@ void OneDateEnergyPrivate::processApiResult(const QJsonObject &json)
     const int output = static_cast<int>(std::round(outputKwh * 1000));
     Utils::updateField(m_output, output, q, &OneDateEnergy::outputChanged);
     valid = valid || (!outputValue.isUndefined() && !outputValue.isNull());
+
+    const auto chargeValue = json.value(QStringLiteral("eCharge"));
+    const auto chargeKwh = chargeValue.toDouble();
+    const int charge = static_cast<int>(std::round(chargeKwh * 1000));
+    Utils::updateField(m_charge, charge, q, &OneDateEnergy::chargeChanged);
+    valid = valid || (!chargeValue.isUndefined() && !chargeValue.isNull());
+
+    const auto dischargeValue = json.value(QStringLiteral("eDischarge"));
+    const auto dischargeKwh = dischargeValue.toDouble();
+    const int discharge = static_cast<int>(std::round(dischargeKwh * 1000));
+    Utils::updateField(m_discharge, discharge, q, &OneDateEnergy::dischargeChanged);
+    valid = valid || (!dischargeValue.isUndefined() && !dischargeValue.isNull());
 
     // TODO eCharge / eDischarge
 
@@ -228,7 +240,7 @@ void OneDateEnergy::setCached(bool cached)
 
 int OneDateEnergy::totalLoad() const
 {
-    return d->m_photovoltaic + d->m_input - d->m_output;
+    return d->m_photovoltaic + d->m_discharge + d->m_input - d->m_output - d->m_charge;
 }
 
 int OneDateEnergy::photovoltaic() const
@@ -246,7 +258,7 @@ int OneDateEnergy::output() const
     return d->m_output;
 }
 
-/*int OneDateEnergy::charge() const
+int OneDateEnergy::charge() const
 {
     return d->m_charge;
 }
@@ -254,7 +266,7 @@ int OneDateEnergy::output() const
 int OneDateEnergy::discharge() const
 {
     return d->m_discharge;
-}*/
+}
 
 int OneDateEnergy::gridCharge() const
 {
