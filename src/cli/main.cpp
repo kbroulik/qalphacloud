@@ -25,6 +25,7 @@
 #include <QAlphaCloud/OneDayPowerModel>
 #include <QAlphaCloud/StorageSystemsModel>
 
+#include "config-alphacloud.h"
 #include "qalphacloud_version.h"
 
 static bool g_jsonOutput = false;
@@ -43,12 +44,19 @@ void printModelContents(QAbstractItemModel *model, const QMetaEnum &rolesEnum)
         }
 
         for (int enumIndex = 0; enumIndex < rolesEnum.keyCount(); ++enumIndex) {
+            const auto enumKey = rolesEnum.key(enumIndex);
             const int enumValue = rolesEnum.value(enumIndex);
-            // Skip "RawJson".
-            if (enumValue == Qt::UserRole + 99) {
+            if (qstrcmp(enumKey, "RawJson") == 0) {
                 continue;
             }
-            cout << rolesEnum.key(enumIndex) << ": " << qPrintable(idx.data(enumValue).toString()) << endl;
+
+#if PRESENTATION_BUILD
+            if (qstrcmp(enumKey, "SerialNumber") == 0 || qstrcmp(enumKey, "InverterModel") == 0 || qstrcmp(enumKey, "BatteryModel") == 0) {
+                continue;
+            }
+#endif
+
+            cout << enumKey << ": " << qPrintable(idx.data(enumValue).toString()) << endl;
         }
     }
 }
@@ -392,7 +400,9 @@ int main(int argc, char **argv)
             return 1;
         }
 
+#if !PRESENTATION_BUILD
         cerr << "Serial number: " << qPrintable(serialNumber) << endl;
+#endif
         showLastPowerData(&connector, serialNumber);
 
     } else if (endpoint.compare(QLatin1String("oneDateEnergyBySn"), Qt::CaseInsensitive) == 0
@@ -409,7 +419,9 @@ int main(int argc, char **argv)
             return 1;
         }
 
+#if !PRESENTATION_BUILD
         cerr << "Serial number: " << qPrintable(serialNumber) << endl;
+#endif
         cerr << "Date: " << qPrintable(date.toString(Qt::ISODate)) << endl;
         showEnergy(&connector, serialNumber, date);
 
@@ -427,7 +439,9 @@ int main(int argc, char **argv)
             return 1;
         }
 
+#if !PRESENTATION_BUILD
         cerr << "Serial number: " << qPrintable(serialNumber) << endl;
+#endif
         cerr << "Date: " << qPrintable(date.toString(Qt::ISODate)) << endl;
         showHistory(&connector, serialNumber, date);
 

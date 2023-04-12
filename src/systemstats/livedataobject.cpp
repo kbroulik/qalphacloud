@@ -20,6 +20,8 @@
 #include <systemstats/SensorObject.h>
 #include <systemstats/SensorProperty.h>
 
+#include "config-alphacloud.h"
+
 using namespace QAlphaCloud;
 
 LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString &serialNumber, KSysGuard::SensorContainer *parent)
@@ -130,8 +132,13 @@ LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString 
 
     connect(m_liveData, &QAlphaCloud::LastPowerData::batteryPowerChanged, this, &LiveDataObject::updateBatteryPower);
 
+#if PRESENTATION_BUILD
+    //: Sensor object name with live data
+    setName(tr("Live"));
+#else
     //: Sensor object name with live data
     setName(tr("%1 (Live)").arg(serialNumber));
+#endif
 
     // Update once initially but make sure the subscriptions have been processed.
     // TODO check if this actually works.

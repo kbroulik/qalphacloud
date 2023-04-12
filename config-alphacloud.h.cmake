@@ -4,3 +4,5 @@
  */
 
 #define API_URL "${API_URL}"
+
+#cmakedefine01 PRESENTATION_BUILD
