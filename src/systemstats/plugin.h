@@ -20,6 +20,7 @@ class Connector;
 class QNetworkAccessManager;
 class QModelIndex;
 
+class DailyDataObject;
 class LiveDataObject;
 class SystemObject;
 
@@ -50,4 +51,5 @@ private:
 
     QHash<QString, SystemObject *> m_systems;
     QHash<QString, LiveDataObject *> m_liveData;
+    QHash<QString, DailyDataObject *> m_dailyData;
 };

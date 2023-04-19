@@ -4,6 +4,7 @@
  */
 
 #include "plugin.h"
+#include "dailydataobject.h"
 #include "livedataobject.h"
 #include "systemobject.h"
 
@@ -45,6 +46,8 @@ SystemStatsPlugin::SystemStatsPlugin(QObject *parent, const QVariantList &args)
         m_systems.clear();
         qDeleteAll(m_liveData);
         m_liveData.clear();
+        qDeleteAll(m_dailyData);
+        m_dailyData.clear();
     });
 
     connect(storageSystems, &StorageSystemsModel::modelReset, this, [this, storageSystems] {
@@ -112,6 +115,9 @@ void SystemStatsPlugin::addStorageSystem(const QModelIndex &index)
 
     auto *liveData = new LiveDataObject(m_connector, serialNumber, m_container);
     m_liveData.insert(serialNumber, liveData);
+
+    auto *dailyData = new DailyDataObject(m_connector, serialNumber, m_container);
+    m_dailyData.insert(serialNumber, dailyData);
 }
 
 void SystemStatsPlugin::removeStorageSystem(const QModelIndex &index)
@@ -120,6 +126,7 @@ void SystemStatsPlugin::removeStorageSystem(const QModelIndex &index)
     // deleteLater?
     delete m_systems.take(serialNumber);
     delete m_liveData.take(serialNumber);
+    delete m_dailyData.take(serialNumber);
 }
 
 void SystemStatsPlugin::update()
@@ -128,6 +135,9 @@ void SystemStatsPlugin::update()
 
     for (auto *liveData : qAsConst(m_liveData)) {
         liveData->update();
+    }
+    for (auto *dailyData : qAsConst(m_dailyData)) {
+        dailyData->update();
     }
 }
 

@@ -4,10 +4,12 @@
 add_library(ksystemstats_plugin_qalphacloud MODULE
     plugin.cpp
     plugin.h
-    systemobject.cpp
-    systemobject.h
+    dailydataobject.cpp
+    dailydataobject.h
     livedataobject.cpp
     livedataobject.h
+    systemobject.cpp
+    systemobject.h
 )
 target_link_libraries(ksystemstats_plugin_qalphacloud
     Qt${QT_MAJOR_VERSION}::Network
