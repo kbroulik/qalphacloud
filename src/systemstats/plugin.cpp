@@ -94,6 +94,9 @@ SystemStatsPlugin::SystemStatsPlugin(QObject *parent, const QVariantList &args)
                     if (auto *storageSystem = m_systems.value(serialNumber)) {
                         storageSystem->update(index);
                     }
+                    if (auto *liveData = m_liveData.value(serialNumber)) {
+                        liveData->updateSystem(index);
+                    }
                 }
             });
 
@@ -114,6 +117,7 @@ void SystemStatsPlugin::addStorageSystem(const QModelIndex &index)
     m_systems.insert(serialNumber, storageSystem);
 
     auto *liveData = new LiveDataObject(m_connector, serialNumber, m_container);
+    liveData->updateSystem(index);
     m_liveData.insert(serialNumber, liveData);
 
     auto *dailyData = new DailyDataObject(m_connector, serialNumber, m_container);

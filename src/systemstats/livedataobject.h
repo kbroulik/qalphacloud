@@ -23,12 +23,15 @@ class Connector;
 class LastPowerData;
 } // namespace QAlphaCloud
 
+class QModelIndex;
+
 class LiveDataObject : public KSysGuard::SensorObject
 {
 public:
     LiveDataObject(QAlphaCloud::Connector *connector, const QString &serialNumber, KSysGuard::SensorContainer *parent);
 
     void update();
+    void updateSystem(const QModelIndex &index);
 
 private:
     void reload();
@@ -43,9 +46,14 @@ private:
     KSysGuard::SensorProperty *m_gridConsumptionProperty = nullptr;
 
     KSysGuard::SensorProperty *m_batterySocProperty = nullptr;
+    KSysGuard::SensorProperty *m_batteryEnergyProperty = nullptr;
+
     KSysGuard::SensorProperty *m_batteryChargeProperty = nullptr;
     KSysGuard::SensorProperty *m_batteryDischargeProperty = nullptr;
     // TODO battery status property
+
+    // Mirrored from StorageSystemsModel
+    int m_batteryRemainingCapacityWh = 0;
 
     QTimer m_rateLimitTimer;
     bool m_updatePending = false;
