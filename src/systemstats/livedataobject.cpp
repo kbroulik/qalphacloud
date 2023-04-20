@@ -5,11 +5,6 @@
 
 #include "livedataobject.h"
 
-#include <QDate>
-#include <QNetworkAccessManager>
-
-#include <KPluginFactory>
-
 #include <algorithm>
 #include <cmath>
 
@@ -18,7 +13,6 @@
 #include <QAlphaCloud/StorageSystemsModel>
 
 #include <systemstats/SensorContainer.h>
-#include <systemstats/SensorObject.h>
 #include <systemstats/SensorProperty.h>
 
 #include "config-alphacloud.h"

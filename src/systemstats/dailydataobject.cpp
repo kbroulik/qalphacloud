@@ -14,7 +14,6 @@
 #include <QAlphaCloud/QAlphaCloud>
 
 #include <systemstats/SensorContainer.h>
-#include <systemstats/SensorObject.h>
 #include <systemstats/SensorProperty.h>
 
 #include "config-alphacloud.h"

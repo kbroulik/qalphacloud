@@ -5,14 +5,11 @@
 
 #include "systemobject.h"
 
-#include <KPluginFactory>
-
 #include <QAlphaCloud/QAlphaCloud>
 #include <QAlphaCloud/StorageSystemsModel>
 
 #include <systemstats/AggregateSensor.h>
 #include <systemstats/SensorContainer.h>
-#include <systemstats/SensorObject.h>
 #include <systemstats/SensorProperty.h>
 
 #include "config-alphacloud.h"
