@@ -11,10 +11,11 @@
 #include <KPluginFactory>
 
 #include <algorithm>
+#include <cmath>
 
 #include <QAlphaCloud/LastPowerData>
 #include <QAlphaCloud/QAlphaCloud>
-//#include <QAlphaCloud/StorageSystemsModel>
+#include <QAlphaCloud/StorageSystemsModel>
 
 #include <systemstats/SensorContainer.h>
 #include <systemstats/SensorObject.h>
@@ -84,7 +85,7 @@ LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString 
     // m_gridConsumptionProperty->setMax(photovoltaicDesignPower * 1000);
     connect(m_gridConsumptionProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
 
-    // Battery state of charge:
+    // Battery state of charge percent:
     m_batterySocProperty = new KSysGuard::SensorProperty(QStringLiteral("batterySoc"), tr("State of Charge"), 0, this);
     m_batterySocProperty->setShortName(tr("SOC"));
     m_batterySocProperty->setDescription(tr("Percentage the battery is charged"));
@@ -93,6 +94,15 @@ LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString 
     m_batterySocProperty->setMax(100.0);
     m_batterySocProperty->setMin(0.0);
     connect(m_batterySocProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
+
+    // Battery state of charge Wh:
+    m_batteryEnergyProperty = new KSysGuard::SensorProperty(QStringLiteral("batteryEnergy"), tr("Battery Energy"), 0, this);
+    m_batteryEnergyProperty->setShortName(tr("Energy"));
+    m_batteryEnergyProperty->setDescription(tr("Amount of energy that is currently stored in the battery"));
+    m_batteryEnergyProperty->setUnit(KSysGuard::Unit::UnitWattHour);
+    m_batteryEnergyProperty->setVariantType(QVariant::Int);
+    // TODO max to battery Usable Capacity
+    connect(m_batteryEnergyProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
 
     // Battery charging rate:
     m_batteryChargeProperty = new KSysGuard::SensorProperty(QStringLiteral("batteryCharge"), tr("Battery Charge"), 0, this);
@@ -157,6 +167,7 @@ void LiveDataObject::update()
     m_gridConsumptionProperty->setValue(gridConsumption);
 
     m_batterySocProperty->setValue(m_liveData->batterySoc());
+    m_batteryEnergyProperty->setValue(std::round(m_batteryRemainingCapacityWh * m_liveData->batterySoc() / 100.0));
 
     const int batteryPower = m_liveData->batteryPower();
     int batteryCharge = 0;
@@ -172,11 +183,18 @@ void LiveDataObject::update()
     m_batteryDischargeProperty->setValue(batteryDischarge);
 }
 
+void LiveDataObject::updateSystem(const QModelIndex &index)
+{
+    m_batteryRemainingCapacityWh = index.data(static_cast<int>(StorageSystemsModel::Roles::BatteryRemainingCapacity)).toInt();
+
+    m_batteryEnergyProperty->setMax(m_batteryRemainingCapacityWh);
+}
+
 void LiveDataObject::reload()
 {
     if (!m_photovoltaicPowerProperty->isSubscribed() && !m_currentLoadProperty->isSubscribed() && !m_gridFeedProperty->isSubscribed()
-        && !m_gridConsumptionProperty->isSubscribed() && !m_batterySocProperty->isSubscribed() && !m_batteryChargeProperty->isSubscribed()
-        && !m_batteryDischargeProperty->isSubscribed()) {
+        && !m_gridConsumptionProperty->isSubscribed() && !m_batterySocProperty->isSubscribed() && !m_batteryEnergyProperty->isSubscribed()
+        && !m_batteryChargeProperty->isSubscribed() && !m_batteryDischargeProperty->isSubscribed()) {
         return;
     }
 
