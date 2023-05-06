@@ -70,6 +70,7 @@ enum class ErrorCode {
     InvalidDate = 6026, ///< Date is invalid, undocumented. Also returned when requesting historic data for a future date.
 
     VerificationCode = 6046, ///< "Verification code error"
+    TooManyRequests = 6053, ///< "The request was too fast, please try again later"
 };
 Q_ENUM_NS(ErrorCode)
 

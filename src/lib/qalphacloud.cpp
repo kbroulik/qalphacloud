@@ -114,6 +114,12 @@ QString errorText(ErrorCode code, const QVariant &details)
             return QCoreApplication::translate("errorText", "Verification code error.");
         }
         break;
+
+    case ErrorCode::TooManyRequests:
+        if (detailsString.isEmpty()) {
+            return QCoreApplication::translate("errorText", "Too many requests, try again later.");
+        }
+        break;
     }
 
     if (!detailsString.isEmpty()) {
