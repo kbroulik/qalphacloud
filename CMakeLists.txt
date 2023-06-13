@@ -72,7 +72,7 @@ if (BUILD_KSYSTEMSTATS)
 endif()
 
 if (BUILD_KINFOCENTER)
-    find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS CoreAddons Declarative)
+    find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS CoreAddons Declarative Package)
 
     find_package(Qt${QT_MAJOR_VERSION}QuickControls2 ${QT_MIN_VERSION})
     set_package_properties(Qt${QT_MAJOR_VERSION}QuickControls2 PROPERTIES
