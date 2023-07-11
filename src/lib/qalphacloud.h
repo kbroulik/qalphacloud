@@ -93,6 +93,7 @@ QALPHACLOUD_EXPORT QString errorText(ErrorCode code, const QVariant &details = Q
 enum class SystemStatus {
     UnknownStatus = -1, ///< Unknown status
     Normal, ///< The system is performing normally
+    Fault, ///< There is a system fault.
     // TODO Find out the others.
 };
 Q_ENUM_NS(SystemStatus)

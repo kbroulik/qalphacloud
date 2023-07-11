@@ -33,7 +33,9 @@ struct StorageSystem {
         const QString statusString = json.value(QStringLiteral("emsStatus")).toString();
         if (statusString == QLatin1String("Normal")) {
             status = QAlphaCloud::SystemStatus::Normal;
-        } // TODO figure out more
+        } else if (statusString == QLatin1String("Fault")) {
+            status = QAlphaCloud::SystemStatus::Fault;
+        }
 
         QString inverterModel = json.value(QStringLiteral("minv")).toString();
         const auto inverterPowerKwh = json.value(QStringLiteral("poinv")).toDouble();
