@@ -104,6 +104,8 @@ AppId=alpha...
 AppSecret=...
 ```
 
+To get access, sign up on [Alpha Cloud Open API website](https://open.alphaess.com/), register your device using the serial number and check code written on the inverter box. You will then find the relevant AppID and Secret on the [Developer Information](https://open.alphaess.com/developmentManagement/developerInformation/) page.
+
 ### Build
 
 Configure and run the build through `cmake`, for example:
