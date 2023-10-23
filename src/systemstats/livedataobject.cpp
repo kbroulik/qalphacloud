@@ -118,6 +118,12 @@ LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString 
     // m_batteryDischargeProperty->setMax(photovoltaicDesignPower * 1000);
     connect(m_batteryDischargeProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
 
+    m_batteryTimeProperty = new KSysGuard::SensorProperty(QStringLiteral("batteryTime"), tr("Remaining Time"), 0, this);
+    m_batteryTimeProperty->setShortName(tr("Remaining"));
+    m_batteryTimeProperty->setUnit(KSysGuard::Unit::UnitTime);
+    m_batteryTimeProperty->setVariantType(QVariant::Int);
+    connect(m_batteryTimeProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
+
 #if PRESENTATION_BUILD
     //: Sensor object name with live data
     setName(tr("Live"));
@@ -161,7 +167,8 @@ void LiveDataObject::update()
     m_gridConsumptionProperty->setValue(gridConsumption);
 
     m_batterySocProperty->setValue(m_liveData->batterySoc());
-    m_batteryEnergyProperty->setValue(std::round(m_batteryRemainingCapacityWh * m_liveData->batterySoc() / 100.0));
+    const int batteryEnergy = std::round(m_batteryRemainingCapacityWh * m_liveData->batterySoc() / 100.0);
+    m_batteryEnergyProperty->setValue(batteryEnergy);
 
     const int batteryPower = m_liveData->batteryPower();
     int batteryCharge = 0;
@@ -175,6 +182,18 @@ void LiveDataObject::update()
 
     m_batteryChargeProperty->setValue(batteryCharge);
     m_batteryDischargeProperty->setValue(batteryDischarge);
+
+    if (batteryCharge > 0) {
+        m_batteryTimeProperty->setName(tr("Time until full"));
+
+        if (m_batteryRemainingCapacityWh > 0) {
+            const int neededCapacity = std::max(0, m_batteryRemainingCapacityWh - batteryEnergy);
+            m_batteryTimeProperty->setValue(neededCapacity / qreal(batteryCharge) * 60 * 60);
+        }
+    } else if (batteryDischarge > 0) {
+        m_batteryTimeProperty->setName(tr("Time until empty"));
+        m_batteryTimeProperty->setValue(batteryEnergy / qreal(batteryDischarge) * 60 * 60);
+    }
 }
 
 void LiveDataObject::updateSystem(const QModelIndex &index)
