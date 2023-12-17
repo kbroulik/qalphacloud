@@ -66,9 +66,11 @@ enum class ErrorCode {
     SignEmpty = 6010, ///< "Sign is empty"
     TimestampEmpty = 6011, ///< "timestamp is empty"
     AppIdEmpty = 6012, ///< "AppId is empty"
-
-    InvalidDate = 6026, ///< Date is invalid, undocumented. Also returned when requesting historic data for a future date.
-
+    DataDoesNotExist = 6016, ///< "Data does not exist or has been deleted"
+    InvalidDate = 6026, ///< Date is invalid, documented as "internal error". Also returned when requesting historic data for a future date.
+    OperationFailed = 6029, ///< "Operation failed"
+    SystemSnDoesNotExist = 6038, ///< "system sn does not exist"
+    SystemOffline = 6042, ///< "system offline"
     VerificationCode = 6046, ///< "Verification code error"
     TooManyRequests = 6053, ///< "The request was too fast, please try again later"
 };
