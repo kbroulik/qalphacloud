@@ -102,10 +102,29 @@ QString errorText(ErrorCode code, const QVariant &details)
             return QCoreApplication::translate("errorText", "Application ID was not provided.");
         }
         break;
-
+    case ErrorCode::DataDoesNotExist:
+        if (detailsString.isEmpty()) {
+            return QCoreApplication::translate("errorText", "Data does not exist or has been deleted.");
+        }
+        break;
     case ErrorCode::InvalidDate:
         if (detailsString.isEmpty()) {
             return QCoreApplication::translate("errorText", "Invalid date provided.");
+        }
+        break;
+    case ErrorCode::OperationFailed:
+        if (detailsString.isEmpty()) {
+            return QCoreApplication::translate("errorText", "Operation failed.");
+        }
+        break;
+    case ErrorCode::SystemSnDoesNotExist:
+        if (detailsString.isEmpty()) {
+            return QCoreApplication::translate("errorText", "System serial number does not exist.");
+        }
+        break;
+    case ErrorCode::SystemOffline:
+        if (detailsString.isEmpty()) {
+            return QCoreApplication::translate("errorText", "System is offline.");
         }
         break;
 
