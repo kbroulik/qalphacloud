@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['rawjson_157',['RawJson',['../classQAlphaCloud_1_1OneDayPowerModel.html#a4934e192beb20fa63b42d5923b327b23a318d38c70a7646cb3d37ccc427f4d18a',1,'QAlphaCloud::OneDayPowerModel::RawJson()'],['../classQAlphaCloud_1_1StorageSystemsModel.html#a25a8efa77f3119ed400f8cff3bf42084a318d38c70a7646cb3d37ccc427f4d18a',1,'QAlphaCloud::StorageSystemsModel::RawJson()']]]
+  ['timestampempty_200',['TimestampEmpty',['../namespaceQAlphaCloud.html#ad03a9b8e9aee0d525d6da08956078539a2498c0c4f9b5a14b7b792429baf119c7',1,'QAlphaCloud']]],
+  ['timestamperror_201',['TimestampError',['../namespaceQAlphaCloud.html#ad03a9b8e9aee0d525d6da08956078539a671cb39227632ef741a334eb1739353b',1,'QAlphaCloud']]],
+  ['toomanyrequests_202',['TooManyRequests',['../namespaceQAlphaCloud.html#ad03a9b8e9aee0d525d6da08956078539ab00b00233255c3551697fe613001265d',1,'QAlphaCloud']]]
 ];
