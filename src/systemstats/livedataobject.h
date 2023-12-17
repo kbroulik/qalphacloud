@@ -56,6 +56,8 @@ private:
 
     // Mirrored from StorageSystemsModel
     int m_batteryRemainingCapacityWh = 0;
+    // When discharging the battery stops (so remaining time is more accurate).
+    qreal m_batteryDischargeSoc = 0.0;
 
     QTimer m_rateLimitTimer;
     bool m_updatePending = false;

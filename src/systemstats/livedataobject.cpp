@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include <QAlphaCloud/ApiRequest>
 #include <QAlphaCloud/LastPowerData>
 #include <QAlphaCloud/QAlphaCloud>
 #include <QAlphaCloud/StorageSystemsModel>
@@ -190,9 +191,12 @@ void LiveDataObject::update()
             const int neededCapacity = std::max(0, m_batteryRemainingCapacityWh - batteryEnergy);
             m_batteryTimeProperty->setValue(neededCapacity / qreal(batteryCharge) * 60 * 60);
         }
+        // TODO consider batHighCap.
     } else if (batteryDischarge > 0) {
         m_batteryTimeProperty->setName(tr("Time until empty"));
-        m_batteryTimeProperty->setValue(batteryEnergy / qreal(batteryDischarge) * 60 * 60);
+        const int dischargeCapEnergy = m_batteryRemainingCapacityWh * m_batteryDischargeSoc / 100.0;
+        const int remainingEnergy = std::max(0, batteryEnergy - dischargeCapEnergy);
+        m_batteryTimeProperty->setValue(remainingEnergy / qreal(batteryDischarge) * 60 * 60);
     }
 }
 
@@ -201,6 +205,22 @@ void LiveDataObject::updateSystem(const QModelIndex &index)
     m_batteryRemainingCapacityWh = index.data(static_cast<int>(StorageSystemsModel::Roles::BatteryRemainingCapacity)).toInt();
 
     m_batteryEnergyProperty->setMax(m_batteryRemainingCapacityWh);
+
+    // Query discharge cap so remaining time calculation is more accurate since
+    // it will usually not go all the way to zero percent.
+    auto *dischargeRequest = new ApiRequest(m_liveData->connector(), QLatin1String("getDisChargeConfigInfo"));
+    dischargeRequest->setSysSn(m_liveData->serialNumber());
+    connect(dischargeRequest, &ApiRequest::finished, this, [this, dischargeRequest] {
+        if (dischargeRequest->error() != QAlphaCloud::ErrorCode::NoError) {
+            qWarning() << "Failed to read discharge info config" << dischargeRequest->error() << dischargeRequest->errorString();
+            // TODO try again at some point.
+        } else {
+            m_batteryDischargeSoc = dischargeRequest->data().toObject().value(QLatin1String("batUseCap")).toDouble();
+        }
+    });
+    dischargeRequest->send();
+
+    // TODO also check getChargeConfigInfo for batHighCap.
 }
 
 void LiveDataObject::reload()
