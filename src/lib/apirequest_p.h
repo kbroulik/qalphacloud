@@ -14,8 +14,6 @@
 
 #include "qalphacloud.h"
 
-class QTimer;
-
 namespace QAlphaCloud
 {
 
@@ -91,8 +89,6 @@ private:
     QAlphaCloud::ErrorCode m_error = QAlphaCloud::ErrorCode::NoError;
     QString m_errorString;
     QJsonValue m_data;
-
-    QTimer *m_timeoutTimer = nullptr;
 };
 
 } // namespace QAlphaCloud

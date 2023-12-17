@@ -17,7 +17,6 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QScopeGuard>
-#include <QTimer>
 #include <QUrlQuery>
 
 namespace QAlphaCloud
@@ -92,18 +91,6 @@ bool ApiRequest::send()
         return false;
     }
 
-    if (configuration->requestTimeout() > 0) {
-        m_timeoutTimer = new QTimer(this);
-        m_timeoutTimer->setSingleShot(true);
-        connect(m_timeoutTimer, &QTimer::timeout, this, [this] {
-            qCWarning(QALPHACLOUD_LOG) << "Request timed out after" << m_timeoutTimer->interval() << "ms";
-            // TODO set error to QNetworkReply::TimeoutError
-            abort();
-        });
-        // TODO Qt6 QNetworkReply::requestSent
-        m_timeoutTimer->start(configuration->requestTimeout());
-    }
-
     // Calculate Header fields (appId, timeStamp, sign).
     const QByteArray timeStampStr = QByteArray::number(QDateTime::currentSecsSinceEpoch(), 'f', 0);
 
@@ -133,6 +120,8 @@ bool ApiRequest::send()
     url.setQuery(query);
 
     QNetworkRequest request(url);
+    request.setTransferTimeout(configuration->requestTimeout());
+
     // request.setAttribute(QNetworkRequest::Http2AllowedAttribute, false);
 
     // TODO allow spoofing stuff like User Agent.
@@ -151,10 +140,6 @@ bool ApiRequest::send()
 
     auto *reply = m_connector->networkAccessManager()->get(request);
     connect(reply, &QNetworkReply::finished, this, [this, reply] {
-        if (m_timeoutTimer) {
-            m_timeoutTimer->stop();
-        }
-
         if (reply->error() != QNetworkReply::NoError) {
             if (reply->error() == QNetworkReply::OperationCanceledError) {
                 qCDebug(QALPHACLOUD_LOG) << "API request for endpoint" << reply->url() << "was canceled";
