@@ -5,7 +5,7 @@
 
 #include "onedaypowermodel.h"
 
-#include "apirequest_p.h"
+#include "apirequest.h"
 #include "connector.h"
 #include "qalphacloud.h"
 #include "qalphacloud_log.h"

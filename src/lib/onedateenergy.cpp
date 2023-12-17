@@ -5,7 +5,7 @@
 
 #include "onedateenergy.h"
 
-#include "apirequest_p.h"
+#include "apirequest.h"
 #include "qalphacloud_log.h"
 #include "utils_p.h"
 

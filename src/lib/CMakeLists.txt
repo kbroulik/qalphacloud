@@ -14,7 +14,7 @@ target_sources(qalphacloud PRIVATE
     qalphacloud.cpp
     qalphacloud.h
     apirequest.cpp
-    apirequest_p.h
+    apirequest.h
     configuration.cpp
     configuration.h
     connector.cpp
@@ -53,6 +53,7 @@ install(TARGETS qalphacloud EXPORT QAlphaCloudTargets ${KDE_INSTALL_TARGETS_DEFA
 
 ecm_generate_headers(QAlphaCloud_CamelCase_HEADERS
     HEADER_NAMES
+    ApiRequest
     Configuration
     Connector
     LastPowerData
