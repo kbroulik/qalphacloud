@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#include "apirequest_p.h"
+#include "apirequest.h"
 
 #include "connector.h"
 #include "qalphacloud_log.h"
@@ -16,57 +16,127 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QPointer>
 #include <QScopeGuard>
 #include <QUrlQuery>
 
 namespace QAlphaCloud
 {
 
-ApiRequest::ApiRequest(Connector *connector, EndPoint endPoint, QObject *parent)
-    : QObject(parent)
-    , m_connector(connector)
-    , m_endPoint(endPoint)
+class ApiRequestPrivate
 {
-    Q_ASSERT(m_endPoint != EndPoint::NoEndPoint);
+public:
+    explicit ApiRequestPrivate(ApiRequest *q)
+        : q(q)
+    {
+    }
 
-    connect(this, &ApiRequest::finished, this, &ApiRequest::deleteLater);
+    void finalize()
+    {
+        if (m_autoDelete) {
+            q->deleteLater();
+        }
+    }
+
+    ApiRequest *const q;
+    QPointer<QNetworkReply> m_reply;
+
+    Connector *m_connector = nullptr;
+    QString m_endPoint;
+    bool m_autoDelete = true;
+
+    QString m_sysSn;
+    QDate m_queryDate;
+    QUrlQuery m_query;
+
+    QAlphaCloud::ErrorCode m_error = QAlphaCloud::ErrorCode::NoError;
+    QString m_errorString;
+    QJsonValue m_data;
+};
+
+ApiRequest::ApiRequest(Connector *connector, QObject *parent)
+    : ApiRequest(connector, QString(), parent)
+{
+}
+
+ApiRequest::ApiRequest(Connector *connector, const QString &endPoint, QObject *parent)
+    : QObject(parent)
+    , d(std::make_unique<ApiRequestPrivate>(this))
+{
+    Q_ASSERT(connector);
+    d->m_connector = connector;
+    d->m_endPoint = endPoint;
+
+    connect(this, &ApiRequest::finished, this, [this] {
+        d->finalize();
+    });
 }
 
 ApiRequest::~ApiRequest() = default;
 
+QString ApiRequest::endPoint() const
+{
+    return d->m_endPoint;
+}
+
+void ApiRequest::setEndPoint(const QString &endPoint)
+{
+    d->m_endPoint = endPoint;
+}
+
 QString ApiRequest::sysSn() const
 {
-    return m_sysSn;
+    return d->m_sysSn;
 }
 
 void ApiRequest::setSysSn(const QString &sysSn)
 {
-    m_sysSn = sysSn;
+    d->m_sysSn = sysSn;
 }
 
 QDate ApiRequest::queryDate() const
 {
-    return m_queryDate;
+    return d->m_queryDate;
 }
 
 void ApiRequest::setQueryDate(const QDate &date)
 {
-    m_queryDate = date;
+    d->m_queryDate = date;
+}
+
+QUrlQuery ApiRequest::query() const
+{
+    return d->m_query;
+}
+
+void ApiRequest::setQuery(const QUrlQuery &query)
+{
+    d->m_query = query;
+}
+
+bool ApiRequest::autoDelete() const
+{
+    return d->m_autoDelete;
+}
+
+void ApiRequest::setAutoDelete(bool autoDelete)
+{
+    d->m_autoDelete = autoDelete;
 }
 
 QAlphaCloud::ErrorCode ApiRequest::error() const
 {
-    return m_error;
+    return d->m_error;
 }
 
 QString ApiRequest::errorString() const
 {
-    return m_errorString;
+    return d->m_errorString;
 }
 
 QJsonValue ApiRequest::data() const
 {
-    return m_data;
+    return d->m_data;
 }
 
 bool ApiRequest::send()
@@ -75,12 +145,12 @@ bool ApiRequest::send()
         deleteLater();
     });
 
-    if (!m_connector->networkAccessManager()) {
+    if (!d->m_connector->networkAccessManager()) {
         qCCritical(QALPHACLOUD_LOG) << "Cannot send request without QNetworkAccessManager";
         return false;
     }
 
-    auto *configuration = m_connector->configuration();
+    auto *configuration = d->m_connector->configuration();
     if (!configuration) {
         qCCritical(QALPHACLOUD_LOG) << "Cannot send request on a Connector with no configuration";
         return false;
@@ -103,19 +173,15 @@ bool ApiRequest::send()
     // Generate URL.
     QUrl url = configuration->apiUrl();
 
-    QMetaEnum me = QMetaEnum::fromType<EndPoint>();
-    const QString endPointName = QString::fromUtf8(me.valueToKey(static_cast<int>(m_endPoint)));
-
-    url.setPath(QDir::cleanPath(url.path() + QLatin1String("/get") + endPointName));
-    // url.setPath(url.path() + QLatin1String("/get") + endPointName);
+    url.setPath(QDir::cleanPath(url.path() + QLatin1Char('/') + d->m_endPoint));
 
     // Add any additional request parameters.
-    QUrlQuery query(url);
-    if (!m_sysSn.isEmpty()) {
-        query.addQueryItem(QStringLiteral("sysSn"), m_sysSn);
+    QUrlQuery query = d->m_query;
+    if (!d->m_sysSn.isEmpty()) {
+        query.addQueryItem(QStringLiteral("sysSn"), d->m_sysSn);
     }
-    if (m_queryDate.isValid()) {
-        query.addQueryItem(QStringLiteral("queryDate"), m_queryDate.toString(QStringLiteral("yyyy-MM-dd")));
+    if (d->m_queryDate.isValid()) {
+        query.addQueryItem(QStringLiteral("queryDate"), d->m_queryDate.toString(QStringLiteral("yyyy-MM-dd")));
     }
     url.setQuery(query);
 
@@ -134,11 +200,11 @@ bool ApiRequest::send()
 
     qCDebug(QALPHACLOUD_LOG) << "Sending API request to" << url;
 
-    m_error = QAlphaCloud::ErrorCode::NoError;
-    m_errorString.clear();
-    m_data = QJsonObject();
+    d->m_error = QAlphaCloud::ErrorCode::NoError;
+    d->m_errorString.clear();
+    d->m_data = QJsonObject();
 
-    auto *reply = m_connector->networkAccessManager()->get(request);
+    auto *reply = d->m_connector->networkAccessManager()->get(request);
     connect(reply, &QNetworkReply::finished, this, [this, reply] {
         if (reply->error() != QNetworkReply::NoError) {
             if (reply->error() == QNetworkReply::OperationCanceledError) {
@@ -146,8 +212,8 @@ bool ApiRequest::send()
             } else {
                 qCWarning(QALPHACLOUD_LOG) << "API request for endpoint" << reply->url() << "failed with network error" << reply->errorString();
             }
-            m_error = static_cast<QAlphaCloud::ErrorCode>(reply->error());
-            m_errorString = reply->errorString();
+            d->m_error = static_cast<QAlphaCloud::ErrorCode>(reply->error());
+            d->m_errorString = reply->errorString();
             Q_EMIT errorOccurred();
         } else {
             int code = -1;
@@ -155,29 +221,29 @@ bool ApiRequest::send()
             QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll(), &error);
 
             if (error.error != QJsonParseError::NoError) {
-                m_error = ErrorCode::JsonParseError;
-                m_errorString = QAlphaCloud::errorText(m_error, error.errorString());
+                d->m_error = ErrorCode::JsonParseError;
+                d->m_errorString = QAlphaCloud::errorText(d->m_error, error.errorString());
             } else if (!jsonDocument.isObject()) {
-                m_error = ErrorCode::UnexpectedJsonDataError;
-                m_errorString = QAlphaCloud::errorText(m_error, jsonDocument);
+                d->m_error = ErrorCode::UnexpectedJsonDataError;
+                d->m_errorString = QAlphaCloud::errorText(d->m_error, jsonDocument);
             } else {
                 const QJsonObject jsonObject = jsonDocument.object();
                 if (jsonObject.isEmpty()) {
-                    m_error = ErrorCode::EmptyJsonObjectError;
+                    d->m_error = ErrorCode::EmptyJsonObjectError;
                 } else {
                     code = jsonObject.value(QStringLiteral("code")).toInt();
                     if (code != 200) {
-                        m_error = static_cast<QAlphaCloud::ErrorCode>(code);
+                        d->m_error = static_cast<QAlphaCloud::ErrorCode>(code);
                         const QString msg = jsonObject.value(QStringLiteral("msg")).toString();
-                        m_errorString = QAlphaCloud::errorText(m_error, msg);
+                        d->m_errorString = QAlphaCloud::errorText(d->m_error, msg);
                     }
 
-                    m_data = jsonObject.value(QStringLiteral("data"));
+                    d->m_data = jsonObject.value(QStringLiteral("data"));
                 }
             }
 
-            if (m_error != QAlphaCloud::ErrorCode::NoError) {
-                qCWarning(QALPHACLOUD_LOG) << "API request for endpoint" << reply->url() << "failed with API error" << m_error << code << m_errorString;
+            if (d->m_error != QAlphaCloud::ErrorCode::NoError) {
+                qCWarning(QALPHACLOUD_LOG) << "API request for endpoint" << reply->url() << "failed with API error" << d->m_error << code << d->m_errorString;
                 Q_EMIT errorOccurred();
             } else {
                 qCDebug(QALPHACLOUD_LOG) << "API request for endpoint" << reply->url() << "succeeded";
@@ -189,7 +255,7 @@ bool ApiRequest::send()
     });
     connect(reply, &QNetworkReply::finished, reply, &QNetworkReply::deleteLater);
 
-    m_reply = reply;
+    d->m_reply = reply;
 
     cleanup.dismiss();
 
@@ -198,10 +264,12 @@ bool ApiRequest::send()
 
 void ApiRequest::abort()
 {
-    if (m_reply) {
-        m_reply->abort();
-        m_reply = nullptr;
+    if (d->m_reply) {
+        d->m_reply->abort();
+        d->m_reply = nullptr;
     }
+
+    d->finalize();
 }
 
 } // namespace QAlphaCloud
