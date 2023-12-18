@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['lastpowerdata_126',['LastPowerData',['../classQAlphaCloud_1_1LastPowerData.html',1,'QAlphaCloud']]]
+  ['storagesystemsmodel_107',['StorageSystemsModel',['../classQAlphaCloud_1_1StorageSystemsModel.html',1,'QAlphaCloud']]]
 ];
