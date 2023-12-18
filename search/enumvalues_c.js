@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['serialnumber_194',['SerialNumber',['../classQAlphaCloud_1_1StorageSystemsModel.html#a25a8efa77f3119ed400f8cff3bf42084aa54372ef430f726c8343fc5550fade42',1,'QAlphaCloud::StorageSystemsModel']]],
-  ['setfailed_195',['SetFailed',['../namespaceQAlphaCloud.html#ad03a9b8e9aee0d525d6da08956078539af3ee40fc036e28eb721e70e63dcf2234',1,'QAlphaCloud']]],
-  ['signempty_196',['SignEmpty',['../namespaceQAlphaCloud.html#ad03a9b8e9aee0d525d6da08956078539a296f415bb4069946fc327437af892bd4',1,'QAlphaCloud']]],
-  ['signverificationerror_197',['SignVerificationError',['../namespaceQAlphaCloud.html#ad03a9b8e9aee0d525d6da08956078539a60f5c57ab1cc46b0c66b1d6b8b12bf63',1,'QAlphaCloud']]],
-  ['snnotboundtouser_198',['SnNotBoundToUser',['../namespaceQAlphaCloud.html#ad03a9b8e9aee0d525d6da08956078539acfa9f64cadc3c826fc7a69e8a8c43934',1,'QAlphaCloud']]],
-  ['status_199',['Status',['../classQAlphaCloud_1_1StorageSystemsModel.html#a25a8efa77f3119ed400f8cff3bf42084aec53a8c4f07baed5d8825072c89799be',1,'QAlphaCloud::StorageSystemsModel']]]
+  ['parametererror_196',['ParameterError',['../namespaceQAlphaCloud.html#ad03a9b8e9aee0d525d6da08956078539a189976b733e988a6903e4d19d8cd2fea',1,'QAlphaCloud']]],
+  ['photovoltaicenergy_197',['PhotovoltaicEnergy',['../classQAlphaCloud_1_1OneDayPowerModel.html#a4934e192beb20fa63b42d5923b327b23af96531cc65dd42a8f28fba2a1853b545',1,'QAlphaCloud::OneDayPowerModel']]],
+  ['photovoltaicpower_198',['PhotovoltaicPower',['../classQAlphaCloud_1_1StorageSystemsModel.html#a25a8efa77f3119ed400f8cff3bf42084aac706aba81cc36e683173d3a6c226c41',1,'QAlphaCloud::StorageSystemsModel']]]
 ];
