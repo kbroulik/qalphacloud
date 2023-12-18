@@ -48,11 +48,23 @@ QVariant BatterySocScaleProxyModel::data(const QModelIndex &index, int role) con
 }
 
 KCMAlphaCloud::KCMAlphaCloud(QObject *parent, const KPluginMetaData &data, const QVariantList &args)
+#if QT_VERSION_MAJOR == 6
+    : KQuickConfigModule(parent, data)
+#else
     : KQuickAddons::ConfigModule(parent, data, args)
+#endif
 {
+#if QT_VERSION_MAJOR == 6
+    Q_UNUSED(args);
+#endif
+
     qmlRegisterType<BatterySocScaleProxyModel>("de.broulik.qalphacloud.private.kcm", 1, 0, "BatterySocScaleProxyModel");
 
+#if QT_VERSION_MAJOR == 6
+    setButtons(KQuickConfigModule::NoAdditionalButton);
+#else
     setButtons(KQuickAddons::ConfigModule::NoAdditionalButton);
+#endif
 }
 
 bool KCMAlphaCloud::presentationBuild() const

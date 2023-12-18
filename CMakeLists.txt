@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FeatureSummary)
 
-find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
+find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set_package_properties(ECM PROPERTIES TYPE REQUIRED
     DESCRIPTION "Extra CMake Modules."
     URL "https://invent.kde.org/frameworks/extra-cmake-modules")
@@ -72,7 +72,13 @@ if (BUILD_KSYSTEMSTATS)
 endif()
 
 if (BUILD_KINFOCENTER)
-    find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS CoreAddons Declarative Package)
+    find_package(KF${QT_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS CoreAddons Package)
+
+    if (QT_MAJOR_VERSION STREQUAL "6")
+        find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS KCMUtils)
+    else()
+        find_package(KF5 ${KF_MIN_VERSION} REQUIRED COMPONENTS Declarative)
+    endif()
 
     find_package(Qt${QT_MAJOR_VERSION}QuickControls2 ${QT_MIN_VERSION})
     set_package_properties(Qt${QT_MAJOR_VERSION}QuickControls2 PROPERTIES
