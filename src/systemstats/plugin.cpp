@@ -137,10 +137,10 @@ void SystemStatsPlugin::update()
 {
     // TODO reload storage systems model occasionally
 
-    for (auto *liveData : qAsConst(m_liveData)) {
+    for (auto *liveData : std::as_const(m_liveData)) {
         liveData->update();
     }
-    for (auto *dailyData : qAsConst(m_dailyData)) {
+    for (auto *dailyData : std::as_const(m_dailyData)) {
         dailyData->update();
     }
 }
