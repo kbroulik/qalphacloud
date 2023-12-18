@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['endpoint_121',['EndPoint',['../structQAlphaCloud_1_1ApiRequest_1_1EndPoint.html',1,'QAlphaCloud::ApiRequest']]]
+  ['onedateenergy_105',['OneDateEnergy',['../classQAlphaCloud_1_1OneDateEnergy.html',1,'QAlphaCloud']]],
+  ['onedaypowermodel_106',['OneDayPowerModel',['../classQAlphaCloud_1_1OneDayPowerModel.html',1,'QAlphaCloud']]]
 ];

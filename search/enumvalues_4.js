@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['fault_178',['Fault',['../namespaceQAlphaCloud.html#a5792c15f38314d228b48100bfc51710da3731a4591778546a7d1e1c9c06d4e2ee',1,'QAlphaCloud']]],
-  ['finished_179',['Finished',['../namespaceQAlphaCloud.html#aa99402d07cf88bdc1613eb68ebee78fda8f3d10eb21bd36347c258679eba9e92b',1,'QAlphaCloud']]]
+  ['emptyjsonobjecterror_139',['EmptyJsonObjectError',['../namespaceQAlphaCloud.html#ad03a9b8e9aee0d525d6da08956078539ac06d509753ea5f6138d22227c8e8f753',1,'QAlphaCloud']]],
+  ['error_140',['Error',['../namespaceQAlphaCloud.html#aa99402d07cf88bdc1613eb68ebee78fda902b0d55fddef6f8d651fe1035b7d4bd',1,'QAlphaCloud']]]
 ];
