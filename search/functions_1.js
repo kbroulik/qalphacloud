@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['defaultconfiguration_110',['defaultConfiguration',['../classQAlphaCloud_1_1Configuration.html#a1fa80da3b91f14d53205b2544c440a78',1,'QAlphaCloud::Configuration']]],
-  ['defaultconfigurationpath_111',['defaultConfigurationPath',['../classQAlphaCloud_1_1Configuration.html#a4e603578dd3996e8daf8dbcb1e573970',1,'QAlphaCloud::Configuration']]]
+  ['configuration_134',['Configuration',['../classQAlphaCloud_1_1Configuration.html#a026de6c7c879d7d909ad7c2f9fdf7de5',1,'QAlphaCloud::Configuration']]]
 ];
