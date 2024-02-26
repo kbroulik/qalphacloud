@@ -169,7 +169,7 @@ The following development files are required (as well as their respective indire
 #### infocenter
 
 * KCoreAddons (from KDE Frameworks
-* KDeclarative (from KDE Frameworks)
+* KDeclarative (from KDE Frameworks 5) or KCMUtils (from KDE Frameworks 6)
 * KSysGuard (from KDE Plasma)
 * libsensors
 * QML module for Kirigami
@@ -231,7 +231,6 @@ You can find examples for both C++ and QML in the [examples](examples/) director
 
 ## :building_construction: To Do
 
-* The project should be prepared for a Qt 6 build, however this has not been attempted, specifically as KDE Frameworks 6 is still in development.
 * Running clang-tidy, clazy, and friends on CI
 * None of the EV-related readouts are implemented.
 * None of the charging configuration settings (`getChargeConfigInfo`, `updateChargeConfigInfo`, `getDisChargeConfigInfo`, `updateDisChargeConfigInfo`) can be read or altered.
