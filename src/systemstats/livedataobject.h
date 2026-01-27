@@ -47,6 +47,7 @@ private:
 
     KSysGuard::SensorProperty *m_batterySocProperty = nullptr;
     KSysGuard::SensorProperty *m_batteryEnergyProperty = nullptr;
+    KSysGuard::SensorProperty *m_batteryUsableEnergyProperty = nullptr;
 
     KSysGuard::SensorProperty *m_batteryChargeProperty = nullptr;
     KSysGuard::SensorProperty *m_batteryDischargeProperty = nullptr;

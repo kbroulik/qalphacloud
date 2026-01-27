@@ -96,8 +96,15 @@ LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString 
     m_batteryEnergyProperty->setDescription(tr("Amount of energy that is currently stored in the battery"));
     m_batteryEnergyProperty->setUnit(KSysGuard::Unit::UnitWattHour);
     m_batteryEnergyProperty->setVariantType(QVariant::Int);
-    // TODO max to battery Usable Capacity
     connect(m_batteryEnergyProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
+
+    // Usable battery energy (i.e. taking into account min discarge SoC):
+    m_batteryUsableEnergyProperty = new KSysGuard::SensorProperty(QStringLiteral("batteryUsableEnergy"), tr("Battery Usable Energy"), 0, this);
+    m_batteryUsableEnergyProperty->setShortName(tr("Usable Energy"));
+    m_batteryUsableEnergyProperty->setDescription(tr("Amount of usable energy that is currently stored in the battery"));
+    m_batteryUsableEnergyProperty->setUnit(KSysGuard::Unit::UnitWattHour);
+    m_batteryUsableEnergyProperty->setVariantType(QVariant::Int);
+    connect(m_batteryUsableEnergyProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
 
     // Battery charging rate:
     m_batteryChargeProperty = new KSysGuard::SensorProperty(QStringLiteral("batteryCharge"), tr("Battery Charge"), 0, this);
@@ -170,6 +177,8 @@ void LiveDataObject::update()
     m_batterySocProperty->setValue(m_liveData->batterySoc());
     const int batteryEnergy = std::round(m_batteryRemainingCapacityWh * m_liveData->batterySoc() / 100.0);
     m_batteryEnergyProperty->setValue(batteryEnergy);
+    const int batteryUsableEnergy = std::round(m_batteryRemainingCapacityWh * (m_liveData->batterySoc() - m_batteryDischargeSoc) / 100.0);
+    m_batteryUsableEnergyProperty->setValue(batteryUsableEnergy);
 
     const int batteryPower = m_liveData->batteryPower();
     int batteryCharge = 0;
@@ -205,6 +214,7 @@ void LiveDataObject::updateSystem(const QModelIndex &index)
     m_batteryRemainingCapacityWh = index.data(static_cast<int>(StorageSystemsModel::Roles::BatteryRemainingCapacity)).toInt();
 
     m_batteryEnergyProperty->setMax(m_batteryRemainingCapacityWh);
+    m_batteryUsableEnergyProperty->setMax(m_batteryRemainingCapacityWh);
 
     // Query discharge cap so remaining time calculation is more accurate since
     // it will usually not go all the way to zero percent.
@@ -227,7 +237,7 @@ void LiveDataObject::reload()
 {
     if (!m_photovoltaicPowerProperty->isSubscribed() && !m_currentLoadProperty->isSubscribed() && !m_gridFeedProperty->isSubscribed()
         && !m_gridConsumptionProperty->isSubscribed() && !m_batterySocProperty->isSubscribed() && !m_batteryEnergyProperty->isSubscribed()
-        && !m_batteryChargeProperty->isSubscribed() && !m_batteryDischargeProperty->isSubscribed()) {
+        && !m_batteryChargeProperty->isSubscribed() && !m_batteryDischargeProperty->isSubscribed() && !m_batteryUsableEnergyProperty->isSubscribed()) {
         return;
     }
 
