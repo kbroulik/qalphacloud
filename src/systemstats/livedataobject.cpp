@@ -132,6 +132,12 @@ LiveDataObject::LiveDataObject(QAlphaCloud::Connector *connector, const QString 
     m_batteryTimeProperty->setVariantType(QVariant::Int);
     connect(m_batteryTimeProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
 
+    m_batteryEndTimeProperty = new KSysGuard::SensorProperty(QStringLiteral("batteryEndTime"), tr("End Time"), 0, this);
+    m_batteryEndTimeProperty->setShortName(tr("End Time"));
+    m_batteryEndTimeProperty->setUnit(KSysGuard::Unit::UnitTime);
+    m_batteryEndTimeProperty->setVariantType(QVariant::Int);
+    connect(m_batteryEndTimeProperty, &KSysGuard::SensorProperty::subscribedChanged, this, &LiveDataObject::update);
+
 #if PRESENTATION_BUILD
     //: Sensor object name with live data
     setName(tr("Live"));
@@ -195,17 +201,24 @@ void LiveDataObject::update()
 
     if (batteryCharge > 0) {
         m_batteryTimeProperty->setName(tr("Time until full"));
+        m_batteryEndTimeProperty->setName(tr("Full at"));
 
         if (m_batteryRemainingCapacityWh > 0) {
             const int neededCapacity = std::max(0, m_batteryRemainingCapacityWh - batteryEnergy);
-            m_batteryTimeProperty->setValue(neededCapacity / qreal(batteryCharge) * 60 * 60);
+            const int remainingTime = neededCapacity / qreal(batteryCharge) * 60 * 60;
+            m_batteryTimeProperty->setValue(remainingTime);
+            m_batteryEndTimeProperty->setValue(QTime::currentTime().msecsSinceStartOfDay() / 1000 + remainingTime);
         }
         // TODO consider batHighCap.
     } else if (batteryDischarge > 0) {
         m_batteryTimeProperty->setName(tr("Time until empty"));
+        m_batteryEndTimeProperty->setName(tr("Empty at"));
+
         const int dischargeCapEnergy = m_batteryRemainingCapacityWh * m_batteryDischargeSoc / 100.0;
         const int remainingEnergy = std::max(0, batteryEnergy - dischargeCapEnergy);
-        m_batteryTimeProperty->setValue(remainingEnergy / qreal(batteryDischarge) * 60 * 60);
+        const int remainingTime = remainingEnergy / qreal(batteryDischarge) * 60 * 60;
+        m_batteryTimeProperty->setValue(remainingTime);
+        m_batteryEndTimeProperty->setValue(QTime::currentTime().msecsSinceStartOfDay() / 1000 + remainingTime);
     }
 }
 
@@ -237,7 +250,8 @@ void LiveDataObject::reload()
 {
     if (!m_photovoltaicPowerProperty->isSubscribed() && !m_currentLoadProperty->isSubscribed() && !m_gridFeedProperty->isSubscribed()
         && !m_gridConsumptionProperty->isSubscribed() && !m_batterySocProperty->isSubscribed() && !m_batteryEnergyProperty->isSubscribed()
-        && !m_batteryChargeProperty->isSubscribed() && !m_batteryDischargeProperty->isSubscribed() && !m_batteryUsableEnergyProperty->isSubscribed()) {
+        && !m_batteryChargeProperty->isSubscribed() && !m_batteryDischargeProperty->isSubscribed() && !m_batteryUsableEnergyProperty->isSubscribed()
+        && !m_batteryEndTimeProperty->isSubscribed()) {
         return;
     }
 

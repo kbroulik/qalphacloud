@@ -53,6 +53,7 @@ private:
     KSysGuard::SensorProperty *m_batteryDischargeProperty = nullptr;
 
     KSysGuard::SensorProperty *m_batteryTimeProperty = nullptr;
+    KSysGuard::SensorProperty *m_batteryEndTimeProperty = nullptr;
     // TODO battery status property
 
     // Mirrored from StorageSystemsModel
