@@ -5,7 +5,13 @@
 
 #pragma once
 
+#include <qglobal.h>
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <KQuickConfigModule>
+#else
 #include <KQuickAddons/ConfigModule>
+#endif
 
 #include <QIdentityProxyModel>
 
@@ -30,14 +36,18 @@ private:
     qreal m_factor = 0;
 };
 
+#if QT_VERSION_MAJOR == 6
+class KCMAlphaCloud : public KQuickConfigModule
+#else
 class KCMAlphaCloud : public KQuickAddons::ConfigModule
+#endif
 {
     Q_OBJECT
 
     Q_PROPERTY(bool presentationBuild READ presentationBuild CONSTANT)
 
 public:
-    explicit KCMAlphaCloud(QObject *parent, const KPluginMetaData &data, const QVariantList &args);
+    explicit KCMAlphaCloud(QObject *parent, const KPluginMetaData &metaData, const QVariantList &args);
 
     bool presentationBuild() const;
 };
